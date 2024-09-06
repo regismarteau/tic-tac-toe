@@ -1,5 +1,7 @@
 ﻿using Domain;
 using Domain.Events;
+using Domain.Exceptions;
+using Domain.ValueObjects;
 using FluentAssertions;
 using UnitTests.Helpers;
 
@@ -7,21 +9,21 @@ namespace UnitTests;
 
 public class TicTacToeVictoryTests
 {
-    protected const CellToMark X = CellToMark.X;
-    protected const CellToMark O = CellToMark.O;
-    protected const CellToMark _ = CellToMark.Not;
-    private readonly TicTacToe ticTacToe;
+    protected const DisplayedCell X = DisplayedCell.X;
+    protected const DisplayedCell O = DisplayedCell.O;
+    protected const DisplayedCell _ = DisplayedCell._;
+    private readonly Game game;
 
     public TicTacToeVictoryTests()
     {
-        this.ticTacToe = TicTacToe.StartNewGame();
+        this.game = Game.Start();
     }
 
     [Theory]
     [InlineData([
         X, X, X,
         O, O, _,
-        _, _, _])]        
+        _, _, _])]
     [InlineData([
         O, O, _,
         X, X, X,
@@ -50,9 +52,9 @@ public class TicTacToeVictoryTests
         _, O, X,
         O, X, _,
         X, _, _])]
-    public void ThePlayerXWinsTheGameWhenALineIsDrawn(params CellToMark[] cellsToMark)
+    public void ThePlayerXWinsTheGameWhenALineIsDrawn(params DisplayedCell[] cells)
     {
-        this.PlayAGame(cellsToMark).Should().Be(new GameWon(Player.X));
+        this.PlayAGame(cells).Should().Be(new GameWon(Player.X));
     }
 
     [Theory]
@@ -66,9 +68,9 @@ public class TicTacToeVictoryTests
         X, O, O,
         X, X, O
         ])]
-    public void ThePlayerOWinsTheGameWhenALineIsDrawn(params CellToMark[] cellsToMark)
+    public void ThePlayerOWinsTheGameWhenALineIsDrawn(params DisplayedCell[] cells)
     {
-        this.PlayAGame(cellsToMark).Should().Be(new GameWon(Player.O));
+        this.PlayAGame(cells).Should().Be(new GameWon(Player.O));
     }
 
     [Theory]
@@ -92,16 +94,29 @@ public class TicTacToeVictoryTests
         X, O, O,
         O, X, X
         ])]
-    public void ItIsPossibleThatNoOneWins(params CellToMark[] cellsToMark)
+    public void ItIsPossibleThatNoOneWins(params DisplayedCell[] cells)
     {
-        this.PlayAGame(cellsToMark).Should().Be(new Draw());
+        this.PlayAGame(cells).Should().Be(new GameResultedAsADraw());
     }
 
-    private GameCompleted? PlayAGame(CellToMark[] cellsToMark)
+    [Fact]
+    public void ItIsImpossibleToMarkAnotherCellAfterAVictory()
     {
-        foreach (var mark in cellsToMark.AsMarks())
+        this.PlayAGame([
+            X, X, X,
+            O, O, _,
+            _, _, _]);
+
+        this.Invoking(self => self.game.Play(Player.O, Cell.Right))
+            .Should()
+            .ThrowExactly<GameAlreadyCompletedException>();
+    }
+
+    private GameCompleted? PlayAGame(DisplayedCell[] cells)
+    {
+        foreach (var play in cells.AsPlays())
         {
-            var gameCompleted = this.ticTacToe.Mark(mark.Player, mark.Cell)
+            var gameCompleted = this.game.Play(play.Player, play.Cell)
                 .OfType<GameCompleted>()
                 .FirstOrDefault();
 

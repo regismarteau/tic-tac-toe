@@ -1,52 +1,61 @@
 ﻿using Domain.Exceptions;
 
-namespace Domain;
+namespace Domain.ValueObjects;
 
-internal class Grid
+internal class TicTacToe
 {
     private const int TotalCellsCount = 9;
     private readonly IReadOnlyCollection<Mark> marks;
 
-    private Grid(IReadOnlyCollection<Mark> marks)
+    private TicTacToe(IReadOnlyCollection<Mark> marks)
     {
         this.marks = marks;
-        this.Winner = this.EvaluateWinner();
-        this.IsCompleted = marks.Count == TotalCellsCount;
+        this.Result = this.EvaluateResult();
     }
 
-    public Winner Winner { get; }
-    public bool IsCompleted { get; }
+    public Result Result { get; }
+    private bool AllCellsAreMarked => this.marks.Count == TotalCellsCount;
 
-    private Winner EvaluateWinner()
+    public static TicTacToe Init()
+    {
+        return new([]);
+    }
+
+    private Result EvaluateResult()
     {
         if (this.marks.Count == 0)
         {
-            return Winner.NoOne;
+            return new NoWinnerYet();
         }
 
         var marksByPlayer = this.marks.GroupBy(mark => mark.Player).ToList();
         var playerXMarks = marksByPlayer.Single(player => player.Key == Player.X).Select(mark => mark.Cell).ToList();
         if (playerXMarks.ContainALine())
         {
-            return Winner.PlayerX;
+            return new WonBy(Player.X);
         }
 
         var playerOMarks = marksByPlayer.SingleOrDefault(player => player.Key == Player.O)?.Select(mark => mark.Cell).ToList() ?? [];
         if (playerOMarks.ContainALine())
         {
-            return Winner.PlayerO;
+            return new WonBy(Player.O);
         }
 
-        return Winner.NoOne;
+        if (this.AllCellsAreMarked)
+        {
+            return new Draw();
+        }
+
+        return new NoWinnerYet();
     }
 
-    public static Grid Init()
+    public TicTacToe Mark(Mark mark)
     {
-        return new([]);
-    }
+        if (this.Result is Completed)
+        {
+            throw new GameAlreadyCompletedException();
+        }
 
-    public Grid Mark(Mark mark)
-    {
         if (mark.Player != this.GetNextPlayer())
         {
             throw new BadPlayerException();
@@ -72,13 +81,4 @@ internal class Grid
         var playerOMarksCount = marksByPlayer.SingleOrDefault(player => player.Key == Player.O)?.Count() ?? 0;
         return playerXMarksCount == playerOMarksCount ? Player.X : Player.O;
     }
-}
-
-public record Mark(Player Player, Cell Cell);
-
-public enum Winner
-{
-    NoOne,
-    PlayerX,
-    PlayerO
 }

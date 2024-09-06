@@ -1,31 +1,31 @@
 using Domain;
 using Domain.Events;
 using Domain.Exceptions;
+using Domain.ValueObjects;
 using FluentAssertions;
 
 namespace UnitTests;
 
 public class TicTacToeMarkTests
 {
-    private readonly TicTacToe ticTacToe;
+    private readonly Game game;
 
     public TicTacToeMarkTests()
     {
-        this.ticTacToe = TicTacToe.StartNewGame();
+        this.game = Game.Start();
     }
-
 
     [Fact]
     public void ThePlayerXCanMarkACellFirst()
     {
-        var cellMarked = this.ticTacToe.Mark(Player.X, Cell.TopLeft);
+        var cellMarked = this.game.Play(Player.X, Cell.TopLeft);
         cellMarked.Should().BeEquivalentTo([new CellMarked(Player.X, Cell.TopLeft)]);
     }
 
     [Fact]
     public void ThePlayerOCantMarkFirst()
     {
-        this.Invoking(self => this.ticTacToe.Mark(Player.O, Cell.TopLeft))
+        this.Invoking(self => this.game.Play(Player.O, Cell.TopLeft))
             .Should()
             .ThrowExactly<BadPlayerException>();
     }
@@ -33,8 +33,8 @@ public class TicTacToeMarkTests
     [Fact]
     public void ThePlayerXCantMarkTwice()
     {
-        this.ticTacToe.Mark(Player.X, Cell.TopLeft);
-        this.Invoking(self => this.ticTacToe.Mark(Player.X, Cell.TopMiddle))
+        this.game.Play(Player.X, Cell.TopLeft);
+        this.Invoking(self => this.game.Play(Player.X, Cell.TopMiddle))
             .Should()
             .ThrowExactly<BadPlayerException>();
     }
@@ -42,19 +42,19 @@ public class TicTacToeMarkTests
     [Fact]
     public void ThePlayerOCanMarkAfterPlayerX()
     {
-        this.ticTacToe.Mark(Player.X, Cell.TopLeft);
-        var cellMarked = this.ticTacToe.Mark(Player.O, Cell.Right);
+        this.game.Play(Player.X, Cell.TopLeft);
+        var cellMarked = this.game.Play(Player.O, Cell.Right);
         cellMarked.Should().BeEquivalentTo([new CellMarked(Player.O, Cell.Right)]);
     }
 
     [Fact]
     public void APlayerCantMarkACellAlreadyMarked()
     {
-        this.ticTacToe.Mark(Player.X, Cell.TopLeft);
-        this.ticTacToe.Mark(Player.O, Cell.Middle);
-        this.ticTacToe.Mark(Player.X, Cell.BottomRight);
+        this.game.Play(Player.X, Cell.TopLeft);
+        this.game.Play(Player.O, Cell.Middle);
+        this.game.Play(Player.X, Cell.BottomRight);
 
-        this.Invoking(self => this.ticTacToe.Mark(Player.O, Cell.TopLeft))
+        this.Invoking(self => this.game.Play(Player.O, Cell.TopLeft))
             .Should()
             .ThrowExactly<CellAlreadyMarkedException>();
     }

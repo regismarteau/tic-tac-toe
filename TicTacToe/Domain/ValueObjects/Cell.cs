@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.ValueObjects;
 
 public enum Cell
 {

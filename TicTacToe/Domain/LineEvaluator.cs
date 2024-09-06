@@ -1,4 +1,6 @@
-﻿namespace Domain;
+﻿using Domain.ValueObjects;
+
+namespace Domain;
 
 internal static class LineEvaluator
 {

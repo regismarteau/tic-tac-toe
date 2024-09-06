@@ -1,31 +1,31 @@
-﻿using Domain;
+﻿using Domain.ValueObjects;
 using FluentAssertions;
 
 namespace UnitTests.Helpers;
 
-public enum CellToMark
+public enum DisplayedCell
 {
-    Not, 
+    _, 
     X, 
     O
 }
 
-public static class CellsToMark
+public static class DisplayedCellExtensions
 {
-    public static IEnumerable<Mark> AsMarks(this CellToMark[] cellsToMark)
+    public static IEnumerable<Play> AsPlays(this DisplayedCell[] cells)
     {
         var turn = 0;
         IndexedCellToMark? nextPlayerXCell;
         IndexedCellToMark? nextPlayerOCell;
-        var indexedCellsToMark = cellsToMark.Select((cellToMark, index) => new IndexedCellToMark(cellToMark, index)).ToArray();
+        var indexedCellsToMark = cells.Select((cellToMark, index) => new IndexedCellToMark(cellToMark, index)).ToArray();
         do
         {
-            nextPlayerXCell = indexedCellsToMark.Where(mark => mark.Cell == CellToMark.X).Skip(turn).FirstOrDefault();
+            nextPlayerXCell = indexedCellsToMark.Where(mark => mark.Cell == DisplayedCell.X).Skip(turn).FirstOrDefault();
             if (nextPlayerXCell is not null)
             {
                 yield return new(Player.X, nextPlayerXCell.Index.ToCell());
             }
-            nextPlayerOCell = indexedCellsToMark.Where(mark => mark.Cell == CellToMark.O).Skip(turn).FirstOrDefault();
+            nextPlayerOCell = indexedCellsToMark.Where(mark => mark.Cell == DisplayedCell.O).Skip(turn).FirstOrDefault();
             if (nextPlayerOCell is not null)
             {
                 yield return new(Player.O, nextPlayerOCell.Index.ToCell());
@@ -41,5 +41,7 @@ public static class CellsToMark
         return (Cell)index;
     }
 
-    private record IndexedCellToMark(CellToMark Cell, int Index);
+    private record IndexedCellToMark(DisplayedCell Cell, int Index);
 }
+
+public record Play(Player Player, Cell Cell);
