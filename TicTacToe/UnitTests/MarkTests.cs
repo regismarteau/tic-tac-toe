@@ -6,11 +6,11 @@ using FluentAssertions;
 
 namespace UnitTests;
 
-public class TicTacToeMarkTests
+public class MarkTests
 {
     private readonly Game game;
 
-    public TicTacToeMarkTests()
+    public MarkTests()
     {
         this.game = Game.Start();
     }

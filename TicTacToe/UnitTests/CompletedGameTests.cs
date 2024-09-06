@@ -7,14 +7,14 @@ using UnitTests.Helpers;
 
 namespace UnitTests;
 
-public class TicTacToeVictoryTests
+public class CompletedGameTests
 {
     protected const DisplayedCell X = DisplayedCell.X;
     protected const DisplayedCell O = DisplayedCell.O;
     protected const DisplayedCell _ = DisplayedCell._;
     private readonly Game game;
 
-    public TicTacToeVictoryTests()
+    public CompletedGameTests()
     {
         this.game = Game.Start();
     }
@@ -116,6 +116,16 @@ public class TicTacToeVictoryTests
         this.Invoking(self => self.game.Play(Player.O, Cell.Right))
             .Should()
             .ThrowExactly<GameAlreadyCompletedException>();
+    }
+
+    [Fact]
+    public void AGameIsNotYetCompletedIfAnotherPlayIsPossible()
+    {
+        this.game
+            .Play(Player.X, Cell.Left)
+            .OfType<GameCompleted>()
+            .Should()
+            .BeEmpty();
     }
 
     private GameCompleted? PlayAGame(DisplayedCell[] cells)
