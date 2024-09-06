@@ -1,63 +1,23 @@
-﻿
+﻿using Domain.Events;
 
 namespace Domain;
 
-public interface IDomainEvent;
-
-public record CellMarked(Player Player, Cell Cell) : IDomainEvent;
-
 public class TicTacToe
 {
-    private readonly IList<CellMarked> cellsMarked = [];
+    private Grid grid = Grid.Init();
     public static TicTacToe StartNewGame()
     {
         return new();
     }
 
-    public IDomainEvent Mark(Player player, Cell cell)
+    public DomainEvents Mark(Player player, Cell cell)
     {
-        var lastCellMarked = this.cellsMarked.LastOrDefault();
-        if ((lastCellMarked?.Player ?? Player.O) == player)
+        this.grid = this.grid.Mark(new(player, cell));
+        var events = DomainEvents.Raise(new CellMarked(player, cell));
+        if (this.grid.Winner != Winner.NoOne)
         {
-            throw new BadPlayerException();
+            events = events.Add(new GameWon(this.grid.Winner == Winner.PlayerX ? Player.X : Player.O));
         }
-
-        if(cellsMarked.Any(cellMarked => cellMarked.Cell == cell))
-        {
-            throw new CellAlreadyMarkedException();
-        }
-
-        var cellMarked = new CellMarked(player, cell);
-        this.cellsMarked.Add(cellMarked);
-        return cellMarked;
+        return events;
     }
-}
-
-public class BadPlayerException : Exception
-{
-
-}
-
-public class CellAlreadyMarkedException : Exception
-{
-
-}
-
-public enum Player
-{
-    X,
-    O
-}
-
-public enum Cell
-{
-    TopLeft,
-    TopMiddle,
-    TopRight,
-    Left,
-    Middle,
-    Right,
-    BottomLeft,
-    BottomMiddle,
-    BottomRight
 }

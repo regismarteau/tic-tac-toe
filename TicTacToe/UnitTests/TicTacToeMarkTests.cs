@@ -1,4 +1,6 @@
 using Domain;
+using Domain.Events;
+using Domain.Exceptions;
 using FluentAssertions;
 
 namespace UnitTests;
@@ -17,7 +19,7 @@ public class TicTacToeMarkTests
     public void ThePlayerXCanMarkACellFirst()
     {
         var cellMarked = this.ticTacToe.Mark(Player.X, Cell.TopLeft);
-        cellMarked.Should().Be(new CellMarked(Player.X, Cell.TopLeft));
+        cellMarked.Should().BeEquivalentTo([new CellMarked(Player.X, Cell.TopLeft)]);
     }
 
     [Fact]
@@ -42,7 +44,7 @@ public class TicTacToeMarkTests
     {
         this.ticTacToe.Mark(Player.X, Cell.TopLeft);
         var cellMarked = this.ticTacToe.Mark(Player.O, Cell.Right);
-        cellMarked.Should().Be(new CellMarked(Player.O, Cell.Right));
+        cellMarked.Should().BeEquivalentTo([new CellMarked(Player.O, Cell.Right)]);
     }
 
     [Fact]
