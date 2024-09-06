@@ -54,7 +54,9 @@ public class TicTacToeVictoryTests
         X, _, _])]
     public void ThePlayerXWinsTheGameWhenALineIsDrawn(params DisplayedCell[] cells)
     {
-        this.PlayAGame(cells).Should().Be(new GameWon(Player.X));
+        this.PlayAGame(cells)
+            .Should()
+            .Be(new GameWon(Player.X));
     }
 
     [Theory]
@@ -70,7 +72,9 @@ public class TicTacToeVictoryTests
         ])]
     public void ThePlayerOWinsTheGameWhenALineIsDrawn(params DisplayedCell[] cells)
     {
-        this.PlayAGame(cells).Should().Be(new GameWon(Player.O));
+        this.PlayAGame(cells)
+            .Should()
+            .Be(new GameWon(Player.O));
     }
 
     [Theory]
@@ -96,7 +100,9 @@ public class TicTacToeVictoryTests
         ])]
     public void ItIsPossibleThatNoOneWins(params DisplayedCell[] cells)
     {
-        this.PlayAGame(cells).Should().Be(new GameResultedAsADraw());
+        this.PlayAGame(cells)
+            .Should()
+            .Be(new GameResultedAsADraw());
     }
 
     [Fact]
@@ -116,7 +122,8 @@ public class TicTacToeVictoryTests
     {
         foreach (var play in cells.AsPlays())
         {
-            var gameCompleted = this.game.Play(play.Player, play.Cell)
+            var gameCompleted = this.game
+                .Play(play.Player, play.Cell)
                 .OfType<GameCompleted>()
                 .FirstOrDefault();
 

@@ -19,7 +19,9 @@ public class TicTacToeMarkTests
     public void ThePlayerXCanMarkACellFirst()
     {
         var cellMarked = this.game.Play(Player.X, Cell.TopLeft);
-        cellMarked.Should().BeEquivalentTo([new CellMarked(Player.X, Cell.TopLeft)]);
+        cellMarked
+            .Should()
+            .BeEquivalentTo([new CellMarked(Player.X, Cell.TopLeft)]);
     }
 
     [Fact]
@@ -44,7 +46,10 @@ public class TicTacToeMarkTests
     {
         this.game.Play(Player.X, Cell.TopLeft);
         var cellMarked = this.game.Play(Player.O, Cell.Right);
-        cellMarked.Should().BeEquivalentTo([new CellMarked(Player.O, Cell.Right)]);
+
+        cellMarked
+            .Should()
+            .BeEquivalentTo([new CellMarked(Player.O, Cell.Right)]);
     }
 
     [Fact]
