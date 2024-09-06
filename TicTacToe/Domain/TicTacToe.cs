@@ -16,8 +16,14 @@ public class TicTacToe
         var events = DomainEvents.Raise(new CellMarked(player, cell));
         if (this.grid.Winner != Winner.NoOne)
         {
-            events = events.Add(new GameWon(this.grid.Winner == Winner.PlayerX ? Player.X : Player.O));
+            return events.Add(new GameWon(this.grid.Winner == Winner.PlayerX ? Player.X : Player.O));
         }
+
+        if (this.grid.IsCompleted)
+        {
+            return events.Add(new Draw());
+        }
+
         return events;
     }
 }

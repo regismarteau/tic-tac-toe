@@ -4,15 +4,18 @@ namespace Domain;
 
 internal class Grid
 {
+    private const int TotalCellsCount = 9;
     private readonly IReadOnlyCollection<Mark> marks;
 
     private Grid(IReadOnlyCollection<Mark> marks)
     {
         this.marks = marks;
         this.Winner = this.EvaluateWinner();
+        this.IsCompleted = marks.Count == TotalCellsCount;
     }
 
     public Winner Winner { get; }
+    public bool IsCompleted { get; }
 
     private Winner EvaluateWinner()
     {

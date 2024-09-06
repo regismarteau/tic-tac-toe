@@ -1,17 +1,15 @@
 ﻿using Domain;
 using Domain.Events;
 using FluentAssertions;
-using System.Collections;
+using UnitTests.Helpers;
 
 namespace UnitTests;
 
-public enum CellToMark
-{
-    Not, X, O
-}
-
 public class TicTacToeVictoryTests
 {
+    protected const CellToMark X = CellToMark.X;
+    protected const CellToMark O = CellToMark.O;
+    protected const CellToMark _ = CellToMark.Not;
     private readonly TicTacToe ticTacToe;
 
     public TicTacToeVictoryTests()
@@ -20,79 +18,99 @@ public class TicTacToeVictoryTests
     }
 
     [Theory]
-    [ClassData(typeof(Play))]
-    public void ThePlayerWinsTheGameWhenALineIsDrawn(params CellToMark[] cellsToMark)
+    [InlineData([
+        X, X, X,
+        O, O, _,
+        _, _, _])]        
+    [InlineData([
+        O, O, _,
+        X, X, X,
+        _, _, _])]
+    [InlineData([
+        _, _, _,
+        O, O, _,
+        X, X, X])]
+    [InlineData([
+        X, O, _,
+        X, O, _,
+        X, _, _])]
+    [InlineData([
+        _, X, O,
+        _, X, O,
+        _, X, _])]
+    [InlineData([
+        O, _, X,
+        O, _, X,
+        _, _, X])]
+    [InlineData([
+        X, O, _,
+        O, X, _,
+        _, _, X])]
+    [InlineData([
+        _, O, X,
+        O, X, _,
+        X, _, _])]
+    public void ThePlayerXWinsTheGameWhenALineIsDrawn(params CellToMark[] cellsToMark)
     {
-        GameWon? gameWon = null;
-        foreach (var mark in cellsToMark.ToMarks())
+        this.PlayAGame(cellsToMark).Should().Be(new GameWon(Player.X));
+    }
+
+    [Theory]
+    [InlineData([
+        X, _, X,
+        O, O, O,
+        _, X, _
+        ])]
+    [InlineData([
+        O, _, X,
+        X, O, O,
+        X, X, O
+        ])]
+    public void ThePlayerOWinsTheGameWhenALineIsDrawn(params CellToMark[] cellsToMark)
+    {
+        this.PlayAGame(cellsToMark).Should().Be(new GameWon(Player.O));
+    }
+
+    [Theory]
+    [InlineData([
+        X, O, X,
+        O, O, X,
+        X, X, O
+        ])]
+    [InlineData([
+        X, O, O,
+        O, X, X,
+        X, X, O
+        ])]
+    [InlineData([
+        X, O, X,
+        X, X, O,
+        O, X, O
+        ])]
+    [InlineData([
+        X, O, X,
+        X, O, O,
+        O, X, X
+        ])]
+    public void ItIsPossibleThatNoOneWins(params CellToMark[] cellsToMark)
+    {
+        this.PlayAGame(cellsToMark).Should().Be(new Draw());
+    }
+
+    private GameCompleted? PlayAGame(CellToMark[] cellsToMark)
+    {
+        foreach (var mark in cellsToMark.AsMarks())
         {
-            gameWon ??= this.ticTacToe.Mark(mark.Player, mark.Cell)
-                .OfType<GameWon>()
+            var gameCompleted = this.ticTacToe.Mark(mark.Player, mark.Cell)
+                .OfType<GameCompleted>()
                 .FirstOrDefault();
+
+            if (gameCompleted is not null)
+            {
+                return gameCompleted;
+            }
         }
 
-        gameWon.Should().Be(new GameWon(Player.X));
+        return null;
     }
-}
-
-public class Play : IEnumerable<object[]>
-{
-    private const CellToMark X = CellToMark.X;
-    private const CellToMark O = CellToMark.O;
-    private const CellToMark _ = CellToMark.Not;
-
-    public IEnumerator<object[]> GetEnumerator()
-    {
-        yield return [
-            X, X, X,
-            O, O, _,
-            _, _, _];
-        yield return [
-            O, O, _,
-            X, X, X,
-            _, _, _];
-        yield return [
-            _, _, _,
-            O, O, _,
-            X, X, X];
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-}
-
-public static class CellsToMarkExtensions
-{
-    public static IEnumerable<Mark> ToMarks(this CellToMark[] cellsToMark)
-    {
-        var turn = 0;
-        IndexedCellToMark? nextPlayerXCell;
-        IndexedCellToMark? nextPlayerOCell;
-        var indexedCellsToMark = cellsToMark.Select((cellToMark, index) => new IndexedCellToMark(cellToMark, index)).ToArray();
-        do
-        {
-            nextPlayerXCell = indexedCellsToMark.Where(mark => mark.Cell == CellToMark.X).Skip(turn).FirstOrDefault();
-            if (nextPlayerXCell is not null)
-            {
-                yield return new(Player.X, nextPlayerXCell.Index.ToCell());
-            }
-            nextPlayerOCell = indexedCellsToMark.Where(mark => mark.Cell == CellToMark.O).Skip(turn).FirstOrDefault();
-            if (nextPlayerOCell is not null)
-            {
-                yield return new(Player.O, nextPlayerOCell.Index.ToCell());
-            }
-
-            turn++;
-        } while (nextPlayerXCell is not null && nextPlayerOCell is not null);
-
-    }
-
-    private static Cell ToCell(this int index)
-    {
-        return (Cell)index;
-    }
-
-    private record IndexedCellToMark(CellToMark Cell, int Index);
 }
