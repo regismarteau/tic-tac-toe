@@ -32,8 +32,8 @@ namespace UnitTests
                 return [(Completed)ticTacToe.Result];
             }
 
-            var bestPlay = new UnbeatableMoveFinder(ticTacToe).FindBestCellToMark();
-            ticTacToe = ticTacToe.Mark(new(Player.O, bestPlay));
+            var bestCell = new UnbeatableMoveFinder(ticTacToe).FindBestCellToMark();
+            ticTacToe = ticTacToe.Mark(new(Player.O, bestCell));
             if (ticTacToe.Result is Completed)
             {
                 return [(Completed)ticTacToe.Result];

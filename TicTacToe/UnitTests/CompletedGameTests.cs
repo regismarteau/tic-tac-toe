@@ -9,9 +9,9 @@ namespace UnitTests;
 
 public class CompletedGameTests
 {
-    protected const DisplayedCell X = DisplayedCell.X;
-    protected const DisplayedCell O = DisplayedCell.O;
-    protected const DisplayedCell _ = DisplayedCell._;
+    protected const DisplayedMark X = DisplayedMark.X;
+    protected const DisplayedMark O = DisplayedMark.O;
+    protected const DisplayedMark _ = DisplayedMark._;
     private readonly Game game;
 
     public CompletedGameTests()
@@ -52,7 +52,7 @@ public class CompletedGameTests
         _, O, X,
         O, X, _,
         X, _, _])]
-    public void ThePlayerXWinsTheGameWhenALineIsDrawn(params DisplayedCell[] cells)
+    public void ThePlayerXWinsTheGameWhenALineIsDrawn(params DisplayedMark[] cells)
     {
         this.PlayAGame(cells)
             .Should()
@@ -70,7 +70,7 @@ public class CompletedGameTests
         X, O, O,
         X, X, O
         ])]
-    public void ThePlayerOWinsTheGameWhenALineIsDrawn(params DisplayedCell[] cells)
+    public void ThePlayerOWinsTheGameWhenALineIsDrawn(params DisplayedMark[] cells)
     {
         this.PlayAGame(cells)
             .Should()
@@ -98,7 +98,7 @@ public class CompletedGameTests
         X, O, O,
         O, X, X
         ])]
-    public void ItIsPossibleThatNoOneWins(params DisplayedCell[] cells)
+    public void ItIsPossibleThatNoOneWins(params DisplayedMark[] cells)
     {
         this.PlayAGame(cells)
             .Should()
@@ -128,7 +128,7 @@ public class CompletedGameTests
             .BeEmpty();
     }
 
-    private GameCompleted? PlayAGame(DisplayedCell[] cells)
+    private GameCompleted? PlayAGame(DisplayedMark[] cells)
     {
         foreach (var play in cells.AsPlays())
         {
