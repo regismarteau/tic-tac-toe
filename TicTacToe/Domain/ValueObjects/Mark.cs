@@ -1,3 +1,3 @@
 ﻿namespace Domain.ValueObjects;
 
-internal record Mark(Player Player, Cell Cell);
+public record Mark(Player Player, Cell Cell);

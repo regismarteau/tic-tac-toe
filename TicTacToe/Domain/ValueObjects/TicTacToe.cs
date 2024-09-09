@@ -1,20 +1,36 @@
 ﻿using Domain.Exceptions;
+using System.Diagnostics;
 
 namespace Domain.ValueObjects;
 
-internal class TicTacToe
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+public class TicTacToe
 {
-    private const int TotalCellsCount = 9;
-    private readonly IReadOnlyCollection<Mark> marks;
+    private readonly IReadOnlyCollection<Cell> XPlayerCells;
+    private readonly IReadOnlyCollection<Cell> OPlayerCells;
+    private readonly bool isFull;
 
     private TicTacToe(IReadOnlyCollection<Mark> marks)
     {
-        this.marks = marks;
+        this.Marks = marks;
+
+        var marksByPlayer = this.Marks.GroupBy(mark => mark.Player).ToList();
+        this.XPlayerCells = marksByPlayer.SingleOrDefault(player => player.Key == Player.X)?.Select(mark => mark.Cell).ToList() ?? [];
+        this.OPlayerCells = marksByPlayer.SingleOrDefault(player => player.Key == Player.O)?.Select(mark => mark.Cell).ToList() ?? [];
+        this.AvailableCells = Enum.GetValues<Cell>().Except(this.XPlayerCells).Except(this.OPlayerCells).ToList();
+        this.isFull = this.AvailableCells.Count == 0;
         this.Result = this.EvaluateResult();
     }
 
+    // TO DELETE
+    private string DebuggerDisplay => string.Join("\r\n\r\n", Enumerable.Range(0, this.Marks.Count).Select(count => new TicTacToe(this.Marks.Take(count + 1).ToArray()).State));
+    private string State => string.Join("", Enum.GetValues<Cell>().Select((cell, index) => (this.Marks.SingleOrDefault(mark => mark.Cell == cell)?.Player.ToString() ?? "-") + ((index + 1) % 3 == 0 ? Environment.NewLine : "")));
+
+    public IReadOnlyCollection<Mark> Marks { get; }
+
+    public IReadOnlyCollection<Cell> AvailableCells { get; }
+
     public Result Result { get; }
-    private bool AllCellsAreMarked => this.marks.Count == TotalCellsCount;
 
     public static TicTacToe Init()
     {
@@ -23,25 +39,17 @@ internal class TicTacToe
 
     private Result EvaluateResult()
     {
-        if (this.marks.Count == 0)
-        {
-            return new NoWinnerYet();
-        }
-
-        var marksByPlayer = this.marks.GroupBy(mark => mark.Player).ToList();
-        var playerXMarks = marksByPlayer.Single(player => player.Key == Player.X).Select(mark => mark.Cell).ToList();
-        if (playerXMarks.ContainALine())
+        if (this.XPlayerCells.ContainALine())
         {
             return new WonBy(Player.X);
         }
 
-        var playerOMarks = marksByPlayer.SingleOrDefault(player => player.Key == Player.O)?.Select(mark => mark.Cell).ToList() ?? [];
-        if (playerOMarks.ContainALine())
+        if (this.OPlayerCells.ContainALine())
         {
             return new WonBy(Player.O);
         }
 
-        if (this.AllCellsAreMarked)
+        if (this.isFull)
         {
             return new Draw();
         }
@@ -61,24 +69,21 @@ internal class TicTacToe
             throw new BadPlayerException();
         }
 
-        if (this.marks.Any(cellMarked => cellMarked.Cell == mark.Cell))
+        if (!this.AvailableCells.Contains(mark.Cell))
         {
             throw new CellAlreadyMarkedException();
         }
 
-        return new([.. this.marks, mark]);
+        return new([.. this.Marks, mark]);
     }
 
-    private Player GetNextPlayer()
+    public Player GetNextPlayer()
     {
-        if (this.marks.Count == 0)
+        if (this.Marks.Count == 0)
         {
             return Player.X;
         }
 
-        var marksByPlayer = this.marks.GroupBy(mark => mark.Player).ToList();
-        var playerXMarksCount = marksByPlayer.Single(player => player.Key == Player.X).Count();
-        var playerOMarksCount = marksByPlayer.SingleOrDefault(player => player.Key == Player.O)?.Count() ?? 0;
-        return playerXMarksCount == playerOMarksCount ? Player.X : Player.O;
+        return this.XPlayerCells.Count == this.OPlayerCells.Count ? Player.X : Player.O;
     }
 }
