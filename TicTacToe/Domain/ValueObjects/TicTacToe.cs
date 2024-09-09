@@ -3,7 +3,6 @@ using System.Diagnostics;
 
 namespace Domain.ValueObjects;
 
-[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class TicTacToe
 {
     private readonly IReadOnlyCollection<Cell> XPlayerCells;
@@ -21,10 +20,6 @@ public class TicTacToe
         this.isFull = this.AvailableCells.Count == 0;
         this.Result = this.EvaluateResult();
     }
-
-    // TO DELETE
-    private string DebuggerDisplay => string.Join("\r\n\r\n", Enumerable.Range(0, this.Marks.Count).Select(count => new TicTacToe(this.Marks.Take(count + 1).ToArray()).State));
-    private string State => string.Join("", Enum.GetValues<Cell>().Select((cell, index) => (this.Marks.SingleOrDefault(mark => mark.Cell == cell)?.Player.ToString() ?? "-") + ((index + 1) % 3 == 0 ? Environment.NewLine : "")));
 
     public IReadOnlyCollection<Mark> Marks { get; }
 
