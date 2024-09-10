@@ -23,8 +23,8 @@ public class GameController(IMediator mediator) : DispatcherController(mediator)
     }
 
     [HttpPost("{gameId:guid}/play/{cell}")]
-    public Task<ActionResult> GetAllMarks([FromRoute] Guid gameId, [FromRoute] Cell cell)
+    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute] Cell cell)
     {
-        return this.Dispatch(new Play(new(gameId), cell));
+        return await this.Dispatch(new Play(new(gameId), cell));
     }
 }

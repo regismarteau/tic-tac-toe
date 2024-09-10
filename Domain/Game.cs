@@ -5,15 +5,15 @@ namespace Domain;
 
 public class Game
 {
-    private TicTacToe ticTacToe;
 
     private Game(GameId id, TicTacToe ticTacToe)
     {
         this.Id = id;
-        this.ticTacToe = ticTacToe;
+        this.TicTacToe = ticTacToe;
     }
 
     public GameId Id { get; }
+    public TicTacToe TicTacToe { get; private set; }
 
     public static Game Rehydrate(GameId id, IReadOnlyCollection<Mark> marks)
     {
@@ -27,10 +27,10 @@ public class Game
 
     public Events Play(Player player, Cell cell)
     {
-        this.ticTacToe = this.ticTacToe.Mark(new(player, cell));
+        this.TicTacToe = this.TicTacToe.Mark(new(player, cell));
         var events = Events.Raise(new CellMarked(this.Id, player, cell));
 
-        return this.ticTacToe.Result switch
+        return this.TicTacToe.Result switch
         {
             WonBy by => events.Add(new GameWon(by.Player)),
             Draw => events.Add(new GameResultedAsADraw()),

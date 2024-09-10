@@ -115,7 +115,7 @@ this.ScenarioInitialize(scenarioInfo);
                             ""});
                 table1.AddRow(new string[] {
                             "",
-                            "",
+                            "O",
                             ""});
                 table1.AddRow(new string[] {
                             "",
