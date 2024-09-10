@@ -1,3 +1,4 @@
+using Database;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

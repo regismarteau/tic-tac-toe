@@ -1,8 +1,8 @@
 ﻿using Domain.ValueObjects;
 
-namespace Domain.Events;
+namespace Domain.DomainEvents;
 
-public record GameCompleted : IDomainEvent;
+public record GameCompleted : IEvent;
 
 public record GameWon(Player By) : GameCompleted;
 

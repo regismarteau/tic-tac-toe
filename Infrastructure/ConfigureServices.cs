@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Database;
+using Microsoft.Extensions.DependencyInjection;
+using Queries;
 using UseCases;
 using UseCases.Ports;
 
@@ -9,9 +11,13 @@ public static class ConfigureServices
     public static IServiceCollection ConfigureTicTacToeServices(this IServiceCollection services)
     {
         return services
-            .AddMediatR(config => config.RegisterServicesFromAssembly(typeof(StartAGame).Assembly))
-            .AddSingleton<GameRepository>()
-            .AddScoped<IFindGame>(p => p.GetRequiredService<GameRepository>())
-            .AddScoped<IStoreGame>(p => p.GetRequiredService<GameRepository>());
+            .AddMediatR(config =>
+                config.RegisterServicesFromAssemblies(
+                    typeof(StartAGame).Assembly,
+                    typeof(GetAllMarksFromGame).Assembly,
+                    typeof(CommitOnCommandSucceed<,>).Assembly))
+            .AddScoped<IFindGame, GameRepository>()
+            .AddScoped<IStoreGame, GameRepository>()
+            .ConfigureDatabase();
     }
 }

@@ -1,5 +1,5 @@
 using Domain;
-using Domain.Events;
+using Domain.DomainEvents;
 using Domain.Exceptions;
 using Domain.ValueObjects;
 using FluentAssertions;
@@ -8,12 +8,8 @@ namespace UnitTests;
 
 public class MarkTests
 {
-    private readonly Game game;
-
-    public MarkTests()
-    {
-        this.game = Game.Start();
-    }
+    private static readonly GameId id = GameId.New();
+    private readonly Game game = Game.Rehydrate(id, []);
 
     [Fact]
     public void ThePlayerXCanMarkACellFirst()
@@ -21,7 +17,7 @@ public class MarkTests
         var cellMarked = this.game.Play(Player.X, Cell.TopLeft);
         cellMarked
             .Should()
-            .BeEquivalentTo([new CellMarked(Player.X, Cell.TopLeft)]);
+            .BeEquivalentTo([new CellMarked(id, Player.X, Cell.TopLeft)]);
     }
 
     [Fact]
@@ -49,7 +45,7 @@ public class MarkTests
 
         cellMarked
             .Should()
-            .BeEquivalentTo([new CellMarked(Player.O, Cell.Right)]);
+            .BeEquivalentTo([new CellMarked(id, Player.O, Cell.Right)]);
     }
 
     [Fact]

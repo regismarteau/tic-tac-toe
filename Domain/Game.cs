@@ -1,4 +1,4 @@
-﻿using Domain.Events;
+﻿using Domain.DomainEvents;
 using Domain.ValueObjects;
 
 namespace Domain;
@@ -7,23 +7,28 @@ public class Game
 {
     private TicTacToe ticTacToe;
 
-    private Game(TicTacToe ticTacToe)
+    private Game(GameId id, TicTacToe ticTacToe)
     {
-        this.Id = GameId.New();
+        this.Id = id;
         this.ticTacToe = ticTacToe;
     }
 
     public GameId Id { get; }
 
-    public static Game Start()
+    public static Game Rehydrate(GameId id, IReadOnlyCollection<Mark> marks)
     {
-        return new(TicTacToe.Init());
+        return new(id, TicTacToe.From(marks));
     }
 
-    public DomainEvents Play(Player player, Cell cell)
+    public static GameStarted Start()
+    {
+        return new GameStarted(GameId.New());
+    }
+
+    public Events Play(Player player, Cell cell)
     {
         this.ticTacToe = this.ticTacToe.Mark(new(player, cell));
-        var events = DomainEvents.Raise(new CellMarked(player, cell));
+        var events = Events.Raise(new CellMarked(this.Id, player, cell));
 
         return this.ticTacToe.Result switch
         {

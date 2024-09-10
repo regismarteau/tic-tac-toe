@@ -1,5 +1,5 @@
 ﻿using Domain;
-using Domain.Events;
+using Domain.DomainEvents;
 using Domain.Exceptions;
 using Domain.ValueObjects;
 using FluentAssertions;
@@ -12,12 +12,7 @@ public class CompletedGameTests
     protected const DisplayedMark X = DisplayedMark.X;
     protected const DisplayedMark O = DisplayedMark.O;
     protected const DisplayedMark _ = DisplayedMark._;
-    private readonly Game game;
-
-    public CompletedGameTests()
-    {
-        this.game = Game.Start();
-    }
+    private readonly Game game = Game.Rehydrate(GameId.New(), []);
 
     [Theory]
     [InlineData([

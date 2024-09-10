@@ -1,12 +1,14 @@
 ﻿using Domain;
+using Domain.DomainEvents;
+using Domain.ValueObjects;
 
 namespace UseCases.Ports;
 
 public interface IStoreGame
 {
-    Task Store(Game game);
+    Task Store(Events events);
 }
 public interface IFindGame
 {
-    Task<Game> Get();
+    Task<Game> Get(GameId id);
 }

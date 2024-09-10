@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{348777C6-C5A9-456A-8310-5C65FE9E2CC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queries", "Queries\Queries.csproj", "{0ED02748-B0E0-43E1-AFB7-A68B8DB63ACA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{E7007E45-F916-4AA5-883E-E84204CE90A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{348777C6-C5A9-456A-8310-5C65FE9E2CC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{348777C6-C5A9-456A-8310-5C65FE9E2CC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{348777C6-C5A9-456A-8310-5C65FE9E2CC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED02748-B0E0-43E1-AFB7-A68B8DB63ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED02748-B0E0-43E1-AFB7-A68B8DB63ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED02748-B0E0-43E1-AFB7-A68B8DB63ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED02748-B0E0-43E1-AFB7-A68B8DB63ACA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7007E45-F916-4AA5-883E-E84204CE90A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7007E45-F916-4AA5-883E-E84204CE90A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7007E45-F916-4AA5-883E-E84204CE90A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7007E45-F916-4AA5-883E-E84204CE90A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

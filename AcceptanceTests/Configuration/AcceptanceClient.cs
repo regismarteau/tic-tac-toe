@@ -9,6 +9,17 @@ public class AcceptanceClient(HttpClient client) : IDisposable
     public async Task<T> Post<T>(string path)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, path);
+        return await this.SendRequest<T>(request);
+    }
+
+    public async Task<T> Get<T>(string path)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, path);
+        return await this.SendRequest<T>(request);
+    }
+
+    private async Task<T> SendRequest<T>(HttpRequestMessage request)
+    {
         var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 

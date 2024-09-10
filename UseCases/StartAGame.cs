@@ -9,8 +9,8 @@ public class StartAGameCommandHandler(IStoreGame store) : CommandHandler<StartAG
 {
     protected override async Task<Guid> Handle(StartAGame command)
     {
-        var game = Game.Start();
-        await store.Store(game);
-        return game.Id.Value;
+        var gameStarted = Game.Start();
+        await store.Store(gameStarted);
+        return gameStarted.Id.Value;
     }
 }

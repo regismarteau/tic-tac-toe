@@ -1,5 +1,4 @@
 ﻿using Domain.Exceptions;
-using System.Diagnostics;
 
 namespace Domain.ValueObjects;
 
@@ -30,6 +29,11 @@ public class TicTacToe
     public static TicTacToe Init()
     {
         return new([]);
+    }
+
+    internal static TicTacToe From(IReadOnlyCollection<Mark> marks)
+    {
+        return new TicTacToe(marks);
     }
 
     private Result EvaluateResult()

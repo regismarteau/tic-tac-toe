@@ -1,20 +1,89 @@
-﻿using Domain;
+﻿using Database;
+using Domain;
+using Domain.DomainEvents;
+using Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using UseCases.Ports;
 
 namespace Infrastructure;
 
-public class GameRepository : IFindGame, IStoreGame
+public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGame
 {
-    private Game? game;
-
-    public Task<Game> Get()
+    public async Task<Game> Get(GameId id)
     {
-        return Task.FromResult(this.game ?? throw new InvalidOperationException("Unable to find the game"));
+        var marks = await dbContext.Marks
+            .Where(mark => mark.GameId == id.Value)
+            .Select(mark => new Mark(
+                    mark.Player == PlayerValue.X ? Player.X : Player.O,
+                    mark.Cell.Map()))
+            .ToListAsync();
+
+        return Game.Rehydrate(id, marks);
     }
 
-    public Task Store(Game game)
+    public async Task Store(Events events)
     {
-        this.game = game;
-        return Task.CompletedTask;
+        foreach (var @event in events)
+        {
+            await this.Handle(@event);
+        }
+    }
+
+    private Task Handle(IEvent @event)
+    {
+        return @event switch
+        {
+            GameStarted started => this.Handle(started),
+            CellMarked marked => this.Handle(marked),
+        };
+    }
+
+    private async Task Handle(GameStarted started)
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task Handle(CellMarked marked)
+    {
+        await dbContext.AddAsync(new MarkEntity
+        {
+            GameId = marked.GameId.Value,
+            Player = marked.Player == Player.X ? PlayerValue.X : PlayerValue.O,
+            Cell = marked.Cell.Map()
+        });
+    }
+}
+
+public static class CellMapper
+{
+    public static Cell Map(this CellValue cell)
+    {
+        return cell switch
+        {
+            CellValue.TopLeft => Cell.TopLeft,
+            CellValue.TopMiddle => Cell.TopMiddle,
+            CellValue.TopRight => Cell.TopRight,
+            CellValue.Left => Cell.Left,
+            CellValue.Middle => Cell.Middle,
+            CellValue.Right => Cell.Right,
+            CellValue.BottomLeft => Cell.BottomLeft,
+            CellValue.BottomMiddle => Cell.BottomMiddle,
+            CellValue.BottomRight => Cell.BottomRight
+        };
+    }
+    public static CellValue Map(this Cell cell)
+    {
+        return cell switch
+        {
+            Cell.TopLeft => CellValue.TopLeft,
+            Cell.TopMiddle => CellValue.TopMiddle,
+            Cell.TopRight => CellValue.TopRight,
+            Cell.Left => CellValue.Left,
+            Cell.Middle => CellValue.Middle,
+            Cell.Right => CellValue.Right,
+            Cell.BottomLeft => CellValue.BottomLeft,
+            Cell.BottomMiddle => CellValue.BottomMiddle,
+            Cell.BottomRight => CellValue.BottomRight
+        };
     }
 }

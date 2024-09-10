@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Queries;
 using Reqnroll;
 
 namespace AcceptanceTests.Steps;
@@ -19,9 +20,21 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
     }
 
     [Then("The game displayed is like")]
-    public void ThenTheGameDisplayedIsLike(DataTable _)
+    public async Task ThenTheGameDisplayedIsLike(DataTable table)
     {
-        this.GameId.Should().NotBeEmpty();
+        var marks = await this.GameRequests.GetAllMarks(this.GameId);
+        marks.Should().BeEquivalentTo(new MarksDto(ToMarks(table)));
     }
 
+    private static List<MarkDto> ToMarks(DataTable table)
+    {
+        return table.Header
+            .Concat(table.Rows.SelectMany(row => row.Values))
+            .Select((cellContent, index) => new { CellContent = cellContent, Index = index })
+            .Where(cell => !string.IsNullOrWhiteSpace(cell.CellContent))
+            .Select(cell => new MarkDto(
+                Symbol: cell.CellContent.ToLowerInvariant() == "x" ? SymbolDto.Cross : SymbolDto.Nought,
+                Cell: (CellDto)cell.Index))
+            .ToList();
+    }
 }
