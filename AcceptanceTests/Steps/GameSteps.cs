@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Domain.ValueObjects;
+using FluentAssertions;
 using Queries;
 using Reqnroll;
 
@@ -13,11 +14,19 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
         set => this.Context.Set(value);
     }
 
+    [Given("a game started")]
     [When("I start a new game")]
     public async Task WhenIStartANewGame()
     {
         this.GameId = await this.GameRequests.Start();
     }
+
+    [When("^I play on (.+?) cell$")]
+    public async Task WhenIPlayOnTopLeftCell(Cell cell)
+    {
+        await this.GameRequests.Play(this.GameId, cell);
+    }
+
 
     [Then("The game displayed is like")]
     public async Task ThenTheGameDisplayedIsLike(DataTable table)

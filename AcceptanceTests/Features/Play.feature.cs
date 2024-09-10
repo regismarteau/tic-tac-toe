@@ -19,7 +19,7 @@ namespace AcceptanceTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class StartAGameFeature : object, Xunit.IClassFixture<StartAGameFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class PlayFeature : object, Xunit.IClassFixture<PlayFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static global::Reqnroll.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace AcceptanceTests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "StartAGame.feature"
+#line 1 "Play.feature"
 #line hidden
         
-        public StartAGameFeature(StartAGameFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public PlayFeature(PlayFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -39,7 +39,7 @@ namespace AcceptanceTests.Features
         public static async System.Threading.Tasks.Task FeatureSetupAsync()
         {
             testRunner = global::Reqnroll.TestRunnerManager.GetTestRunnerForAssembly();
-            global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Start a game", "\tAs a new player\r\n\tI want to start a game\r\n\tIn order to play against a computer", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+            global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Play", "\tAs a player\r\n\tI want to mark a cross\r\n\tIn order to attempt to make a line", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
             await testRunner.OnFeatureStartAsync(featureInfo);
         }
         
@@ -85,14 +85,14 @@ namespace AcceptanceTests.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Start a game should initialize a new tic tac toe")]
-        [Xunit.TraitAttribute("FeatureTitle", "Start a game")]
-        [Xunit.TraitAttribute("Description", "Start a game should initialize a new tic tac toe")]
-        public async System.Threading.Tasks.Task StartAGameShouldInitializeANewTicTacToe()
+        [Xunit.SkippableFactAttribute(DisplayName="The player has to make the first move")]
+        [Xunit.TraitAttribute("FeatureTitle", "Play")]
+        [Xunit.TraitAttribute("Description", "The player has to make the first move")]
+        public async System.Threading.Tasks.Task ThePlayerHasToMakeTheFirstMove()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Start a game should initialize a new tic tac toe", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("The player has to make the first move", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -104,22 +104,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 await this.ScenarioStartAsync();
 #line 8
- await testRunner.WhenAsync("I start a new game", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.GivenAsync("a game started", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-                global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
-                            "",
-                            "",
-                            ""});
-                table2.AddRow(new string[] {
-                            "",
-                            "",
-                            ""});
-                table2.AddRow(new string[] {
-                            "",
-                            "",
-                            ""});
 #line 9
- await testRunner.ThenAsync("The game displayed is like", ((string)(null)), table2, "Then ");
+ await testRunner.WhenAsync("I play on top left cell", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
+                            "X",
+                            "",
+                            ""});
+                table1.AddRow(new string[] {
+                            "",
+                            "",
+                            ""});
+                table1.AddRow(new string[] {
+                            "",
+                            "",
+                            ""});
+#line 10
+ await testRunner.ThenAsync("The game displayed is like", ((string)(null)), table1, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -132,12 +135,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await StartAGameFeature.FeatureSetupAsync();
+                await PlayFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await StartAGameFeature.FeatureTearDownAsync();
+                await PlayFeature.FeatureTearDownAsync();
             }
         }
     }

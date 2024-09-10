@@ -12,10 +12,11 @@ public static class ConfigureServices
     {
         return services
             .AddMediatR(config =>
-                config.RegisterServicesFromAssemblies(
+                config
+                .RegisterServicesFromAssemblies(
                     typeof(StartAGame).Assembly,
-                    typeof(GetAllMarksFromGame).Assembly,
-                    typeof(CommitOnCommandSucceed<,>).Assembly))
+                    typeof(GetAllMarksFromGame).Assembly)
+                .AddOpenBehavior(typeof(CommitOnCommandSucceed<,>), ServiceLifetime.Scoped))
             .AddScoped<IFindGame, GameRepository>()
             .AddScoped<IStoreGame, GameRepository>()
             .ConfigureDatabase();
