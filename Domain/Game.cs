@@ -9,8 +9,11 @@ public class Game
 
     private Game(TicTacToe ticTacToe)
     {
+        this.Id = GameId.New();
         this.ticTacToe = ticTacToe;
     }
+
+    public GameId Id { get; }
 
     public static Game Start()
     {

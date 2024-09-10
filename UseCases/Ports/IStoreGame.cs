@@ -1,13 +1,12 @@
 ﻿using Domain;
 
-namespace UseCases.Ports
+namespace UseCases.Ports;
+
+public interface IStoreGame
 {
-    public interface IStoreGame
-    {
-        Task Store(Game game);
-    }
-    public interface IFindGame
-    {
-        Task<Game> Get();
-    }
+    Task Store(Game game);
+}
+public interface IFindGame
+{
+    Task<Game> Get();
 }
