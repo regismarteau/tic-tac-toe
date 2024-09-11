@@ -1,5 +1,4 @@
 ﻿using Domain.Exceptions;
-using System.Diagnostics;
 
 namespace Domain.ValueObjects;
 
@@ -32,6 +31,11 @@ public class TicTacToe
         return new([]);
     }
 
+    internal static TicTacToe From(IReadOnlyCollection<Mark> marks)
+    {
+        return new TicTacToe(marks);
+    }
+
     private Result EvaluateResult()
     {
         if (this.XPlayerCells.ContainALine())
@@ -49,7 +53,7 @@ public class TicTacToe
             return new Draw();
         }
 
-        return new NoWinnerYet();
+        return new Undetermined();
     }
 
     public TicTacToe Mark(Mark mark)

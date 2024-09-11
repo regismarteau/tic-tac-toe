@@ -1,31 +1,39 @@
-﻿using Domain.Events;
+﻿using Domain.DomainEvents;
 using Domain.ValueObjects;
 
 namespace Domain;
 
 public class Game
 {
-    private TicTacToe ticTacToe;
 
-    private Game(TicTacToe ticTacToe)
+    private Game(GameId id, TicTacToe ticTacToe)
     {
-        this.ticTacToe = ticTacToe;
+        this.Id = id;
+        this.TicTacToe = ticTacToe;
     }
 
-    public static Game Start()
+    public GameId Id { get; }
+    public TicTacToe TicTacToe { get; private set; }
+
+    public static Game Rehydrate(GameId id, IReadOnlyCollection<Mark> marks)
     {
-        return new(TicTacToe.Init());
+        return new(id, TicTacToe.From(marks));
     }
 
-    public DomainEvents Play(Player player, Cell cell)
+    public static GameStarted Start()
     {
-        this.ticTacToe = this.ticTacToe.Mark(new(player, cell));
-        var events = DomainEvents.Raise(new CellMarked(player, cell));
+        return new GameStarted(GameId.New());
+    }
 
-        return this.ticTacToe.Result switch
+    public Events Play(Player player, Cell cell)
+    {
+        this.TicTacToe = this.TicTacToe.Mark(new(player, cell));
+        var events = Events.Raise(new CellMarked(this.Id, player, cell));
+
+        return this.TicTacToe.Result switch
         {
-            WonBy by => events.Add(new GameWon(by.Player)),
-            Draw => events.Add(new GameResultedAsADraw()),
+            WonBy by => events.Add(new GameWon(this.Id, by.Player)),
+            Draw => events.Add(new GameResultedAsADraw(this.Id)),
             _ => events
         };
     }
