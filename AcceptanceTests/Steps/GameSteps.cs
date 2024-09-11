@@ -28,7 +28,7 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
     }
 
 
-    [Then("The game displayed is like")]
+    [Then("the game displayed is like")]
     public async Task ThenTheGameDisplayedIsLike(DataTable table)
     {
         var marks = await this.GameRequests.GetAllMarks(this.GameId);

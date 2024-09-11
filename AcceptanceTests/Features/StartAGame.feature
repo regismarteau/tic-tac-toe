@@ -6,7 +6,7 @@
 
 Scenario: Start a game should initialize a new tic tac toe
 	When I start a new game
-	Then The game displayed is like
+	Then the game displayed is like
 	|  |  |  |
 	|  |  |  |
 	|  |  |  |

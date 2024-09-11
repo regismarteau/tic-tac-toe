@@ -2,19 +2,19 @@
 
 namespace Domain
 {
-    public class UnbeatableMoveFinder
+    public class UnbeatablePlayFinder
     {
         private enum Score
         {
-            Failure = -1,
+            Failure = -10,
             Draw = 0,
-            Victory = 1
+            Victory = 10
         }
         private readonly Player CurrentPlayer;
         private readonly Player Opponent;
         private readonly TicTacToe ticTacToe;
 
-        public UnbeatableMoveFinder(TicTacToe ticTacToe)
+        public UnbeatablePlayFinder(TicTacToe ticTacToe)
         {
             this.ticTacToe = ticTacToe;
             this.CurrentPlayer = ticTacToe.GetNextPlayer();
@@ -34,54 +34,54 @@ namespace Domain
                 .Cell;
         }
 
-        private Score EvaluateScoreFor(TicTacToe ticTacToe, Mark mark)
+        private Score EvaluateScoreFor(TicTacToe ticTacToe, Mark mark, int depth = 0)
         {
             ticTacToe = ticTacToe.Mark(mark);
 
             return ticTacToe.Result switch
             {
-                WonBy wonBy => wonBy.Player == this.CurrentPlayer ? Score.Victory : Score.Failure,
+                WonBy wonBy => wonBy.Player == this.CurrentPlayer ? (Score.Victory - depth) : (Score.Failure + depth),
                 Draw => Score.Draw,
                 _ => mark.Player == this.Opponent
-                    ? this.GetCurrentPlayerNextMarkMaximumScore(ticTacToe)
-                    : this.GetOpponentNextMarkMinimumScore(ticTacToe)
+                    ? this.GetCurrentPlayerNextMarkMaximumScore(ticTacToe, depth)
+                    : this.GetOpponentNextMarkMinimumScore(ticTacToe, depth)
             };
         }
 
-        private Score GetCurrentPlayerNextMarkMaximumScore(TicTacToe ticTacToe)
+        private Score GetCurrentPlayerNextMarkMaximumScore(TicTacToe ticTacToe, int depth)
         {
             var maxScore = Score.Failure;
             foreach (var cell in ticTacToe.AvailableCells)
             {
-                var nextMarkScore = this.EvaluateScoreFor(ticTacToe, new(this.CurrentPlayer, cell));
-                if (nextMarkScore == Score.Victory)
+                var nextMarkScore = this.EvaluateScoreFor(ticTacToe, new(this.CurrentPlayer, cell), depth + 1);
+                if (nextMarkScore > Score.Draw)
                 {
-                    return Score.Victory;
+                    return nextMarkScore;
                 }
 
-                if (nextMarkScore == Score.Draw)
+                if (maxScore < nextMarkScore)
                 {
-                    maxScore = Score.Draw;
+                    maxScore = nextMarkScore;
                 }
             }
 
             return maxScore;
         }
 
-        private Score GetOpponentNextMarkMinimumScore(TicTacToe ticTacToe)
+        private Score GetOpponentNextMarkMinimumScore(TicTacToe ticTacToe, int depth)
         {
             var minScore = Score.Victory;
             foreach (var cell in ticTacToe.AvailableCells)
             {
-                var nextMarkScore = this.EvaluateScoreFor(ticTacToe, new(this.Opponent, cell));
-                if (nextMarkScore == Score.Failure)
+                var nextMarkScore = this.EvaluateScoreFor(ticTacToe, new(this.Opponent, cell), depth + 1);
+                if (nextMarkScore < Score.Draw)
                 {
-                    return Score.Failure;
+                    return nextMarkScore;
                 }
 
-                if (nextMarkScore == Score.Draw)
+                if (minScore > nextMarkScore)
                 {
-                    minScore = Score.Draw;
+                    minScore = nextMarkScore;
                 }
             }
 

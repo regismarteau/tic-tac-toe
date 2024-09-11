@@ -50,6 +50,7 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         {
             GameStarted started => this.Handle(started),
             CellMarked marked => this.Handle(marked),
+            _ => Task.CompletedTask,
         };
     }
 
@@ -83,7 +84,8 @@ public static class CellMapper
             CellValue.Right => Cell.Right,
             CellValue.BottomLeft => Cell.BottomLeft,
             CellValue.BottomMiddle => Cell.BottomMiddle,
-            CellValue.BottomRight => Cell.BottomRight
+            CellValue.BottomRight => Cell.BottomRight,
+            _ => throw new NotImplementedException()
         };
     }
     public static CellValue Map(this Cell cell)
@@ -98,7 +100,8 @@ public static class CellMapper
             Cell.Right => CellValue.Right,
             Cell.BottomLeft => CellValue.BottomLeft,
             Cell.BottomMiddle => CellValue.BottomMiddle,
-            Cell.BottomRight => CellValue.BottomRight
+            Cell.BottomRight => CellValue.BottomRight,
+            _ => throw new NotImplementedException()
         };
     }
 }
