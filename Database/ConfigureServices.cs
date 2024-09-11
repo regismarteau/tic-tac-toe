@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Database;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection ConfigureDatabase(this IServiceCollection services)
+    public static IServiceCollection ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        string databaseName = Guid.NewGuid().ToString();
-        return services.AddDbContext<TicTacToeDbContext>(p => p.UseInMemoryDatabase(databaseName));
+        return services.AddDbContext<TicTacToeDbContext>(p =>
+        {
+            p.UseNpgsql(configuration.GetConnectionString("Database"));
+        });
     }
 }

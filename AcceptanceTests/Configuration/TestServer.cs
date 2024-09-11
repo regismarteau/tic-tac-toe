@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.TestHost;
 
 namespace AcceptanceTests.Configuration;
 
@@ -10,10 +10,9 @@ public class TestServer : IDisposable
 
     public TestServer()
     {
-        this.server = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureServices(config => config.AddScoped<AsynchronousSideEffectsAwaiter>());
-        });
+        this.server = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder
+            .ConfigureTestServices(config => config.SubstituteServices()));
+
         this.Client = new(this.server.CreateClient(), this.server.Services);
     }
 

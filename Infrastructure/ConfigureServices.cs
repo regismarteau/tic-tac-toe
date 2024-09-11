@@ -1,5 +1,6 @@
 ﻿using Database;
 using Infrastructure.OutboxServices;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Queries;
 using UseCases.Commands;
@@ -9,7 +10,7 @@ namespace Infrastructure;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection ConfigureTicTacToeServices(this IServiceCollection services)
+    public static IServiceCollection ConfigureTicTacToeServices(this IServiceCollection services, IConfiguration configuration)
     {
         return services
             .AddMediatR(config =>
@@ -20,7 +21,7 @@ public static class ConfigureServices
                 .AddOpenBehavior(typeof(CommitOnCommandSucceed<,>), ServiceLifetime.Scoped))
             .AddScoped<IFindGame, GameRepository>()
             .AddScoped<IStoreGame, GameRepository>()
-            .AddHostedService<PublishEvents>()
-            .ConfigureDatabase();
+            .AddHostedService<EventsPublisher>()
+            .ConfigureDatabase(configuration);
     }
 }
