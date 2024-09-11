@@ -27,12 +27,27 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
         await this.GameRequests.Play(this.GameId, cell);
     }
 
-
-    [Then("the game displayed is like")]
-    public async Task ThenTheGameDisplayedIsLike(DataTable table)
+    [Then("the game looks like")]
+    public async Task ThenTheGameLooksLike(DataTable table)
     {
-        var marks = await this.GameRequests.GetAllMarks(this.GameId);
-        marks.Should().BeEquivalentTo(new MarksDto(ToMarks(table)));
+        var game = await this.GameRequests.GetAllMarks(this.GameId);
+        game.Marks.Should().BeEquivalentTo(ToMarks(table));
+    }
+
+    [Then("the game ends in a draw")]
+    public async Task ThenTheGameEndsInADraw(DataTable table)
+    {
+        var game = await this.GameRequests.GetAllMarks(this.GameId);
+        game.Marks.Should().BeEquivalentTo(ToMarks(table));
+        game.Result.Should().Be(ResultDto.Draw);
+    }
+
+    [Then("^the game has been won by (me|the computer)$")]
+    public async Task ThenTheGameHasBeenWonBy(string winner, DataTable table)
+    {
+        var game = await this.GameRequests.GetAllMarks(this.GameId);
+        game.Marks.Should().BeEquivalentTo(ToMarks(table));
+        game.Result.Should().Be(winner == "me" ? ResultDto.WonByPlayerX : ResultDto.WonByPlayerO);
     }
 
     private static List<MarkDto> ToMarks(DataTable table)

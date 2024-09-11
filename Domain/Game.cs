@@ -32,8 +32,8 @@ public class Game
 
         return this.TicTacToe.Result switch
         {
-            WonBy by => events.Add(new GameWon(by.Player)),
-            Draw => events.Add(new GameResultedAsADraw()),
+            WonBy by => events.Add(new GameWon(this.Id, by.Player)),
+            Draw => events.Add(new GameResultedAsADraw(this.Id)),
             _ => events
         };
     }

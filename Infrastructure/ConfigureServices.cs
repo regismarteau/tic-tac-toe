@@ -16,7 +16,7 @@ public static class ConfigureServices
                 config
                 .RegisterServicesFromAssemblies(
                     typeof(StartAGame).Assembly,
-                    typeof(GetAllMarksFromGame).Assembly)
+                    typeof(GetGameState).Assembly)
                 .AddOpenBehavior(typeof(CommitOnCommandSucceed<,>), ServiceLifetime.Scoped))
             .AddScoped<IFindGame, GameRepository>()
             .AddScoped<IStoreGame, GameRepository>()

@@ -53,7 +53,7 @@ public class TicTacToe
             return new Draw();
         }
 
-        return new NoWinnerYet();
+        return new Undetermined();
     }
 
     public TicTacToe Mark(Mark mark)

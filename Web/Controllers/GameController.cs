@@ -17,9 +17,9 @@ public class GameController(IMediator mediator) : DispatcherController(mediator)
     }
 
     [HttpGet("{gameId:guid}")]
-    public Task<ActionResult<MarksDto>> GetAllMarks([FromRoute] Guid gameId)
+    public Task<ActionResult<GameDto>> GetAllMarks([FromRoute] Guid gameId)
     {
-        return this.Dispatch(new GetAllMarksFromGame(gameId));
+        return this.Dispatch(new GetGameState(gameId));
     }
 
     [HttpPost("{gameId:guid}/play/{cell}")]

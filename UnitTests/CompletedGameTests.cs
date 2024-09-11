@@ -12,7 +12,8 @@ public class CompletedGameTests
     protected const DisplayedMark X = DisplayedMark.X;
     protected const DisplayedMark O = DisplayedMark.O;
     protected const DisplayedMark _ = DisplayedMark._;
-    private readonly Game game = Game.Rehydrate(GameId.New(), []);
+    private static readonly GameId Id = GameId.New();
+    private readonly Game game = Game.Rehydrate(Id, []);
 
     [Theory]
     [InlineData([
@@ -51,7 +52,7 @@ public class CompletedGameTests
     {
         this.PlayAGame(cells)
             .Should()
-            .Be(new GameWon(Player.X));
+            .Be(new GameWon(Id, Player.X));
     }
 
     [Theory]
@@ -69,7 +70,7 @@ public class CompletedGameTests
     {
         this.PlayAGame(cells)
             .Should()
-            .Be(new GameWon(Player.O));
+            .Be(new GameWon(Id, Player.O));
     }
 
     [Theory]
@@ -97,7 +98,7 @@ public class CompletedGameTests
     {
         this.PlayAGame(cells)
             .Should()
-            .Be(new GameResultedAsADraw());
+            .Be(new GameResultedAsADraw(Id));
     }
 
     [Fact]

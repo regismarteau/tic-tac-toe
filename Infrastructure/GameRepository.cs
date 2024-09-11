@@ -1,10 +1,11 @@
 ﻿using Database;
+using Database.Entities;
+using Database.Extensions;
 using Domain;
 using Domain.DomainEvents;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Text.Json;
 using UseCases.Ports;
 
 namespace Infrastructure;
@@ -50,13 +51,31 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         {
             GameStarted started => this.Handle(started),
             CellMarked marked => this.Handle(marked),
+            GameWon won => this.Handle(won),
+            GameResultedAsADraw draw => this.Handle(draw),
             _ => Task.CompletedTask,
         };
     }
 
     private async Task Handle(GameStarted started)
     {
-        await Task.CompletedTask;
+        await dbContext.Games.AddAsync(new GameEntity
+        {
+            Id = started.Id.Value,
+            Result = ResultValue.Undetermined
+        });
+    }
+
+    private async Task Handle(GameWon won)
+    {
+        var game = await this.GetEntity(won.Id);
+        game.Result = won.By == Player.X ? ResultValue.WonByPlayerX : ResultValue.WonByPlayerO;
+    }
+
+    private async Task Handle(GameResultedAsADraw draw)
+    {
+        var game = await this.GetEntity(draw.Id);
+        game.Result = ResultValue.Draw;
     }
 
     private async Task Handle(CellMarked marked)
@@ -68,40 +87,9 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
             Cell = marked.Cell.Map()
         });
     }
-}
 
-public static class CellMapper
-{
-    public static Cell Map(this CellValue cell)
+    private async Task<GameEntity> GetEntity(GameId id)
     {
-        return cell switch
-        {
-            CellValue.TopLeft => Cell.TopLeft,
-            CellValue.TopMiddle => Cell.TopMiddle,
-            CellValue.TopRight => Cell.TopRight,
-            CellValue.Left => Cell.Left,
-            CellValue.Middle => Cell.Middle,
-            CellValue.Right => Cell.Right,
-            CellValue.BottomLeft => Cell.BottomLeft,
-            CellValue.BottomMiddle => Cell.BottomMiddle,
-            CellValue.BottomRight => Cell.BottomRight,
-            _ => throw new NotImplementedException()
-        };
-    }
-    public static CellValue Map(this Cell cell)
-    {
-        return cell switch
-        {
-            Cell.TopLeft => CellValue.TopLeft,
-            Cell.TopMiddle => CellValue.TopMiddle,
-            Cell.TopRight => CellValue.TopRight,
-            Cell.Left => CellValue.Left,
-            Cell.Middle => CellValue.Middle,
-            Cell.Right => CellValue.Right,
-            Cell.BottomLeft => CellValue.BottomLeft,
-            Cell.BottomMiddle => CellValue.BottomMiddle,
-            Cell.BottomRight => CellValue.BottomRight,
-            _ => throw new NotImplementedException()
-        };
+        return await dbContext.Games.ById(id.Value).SingleAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Database;
+using Database.Entities;
 using Domain.DomainEvents;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

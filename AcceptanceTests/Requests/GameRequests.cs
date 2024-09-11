@@ -11,9 +11,9 @@ namespace AcceptanceTests.Requests
             return client.Post<Guid>("api/game/start");
         }
 
-        public Task<MarksDto> GetAllMarks(Guid gameId)
+        public Task<GameDto> GetAllMarks(Guid gameId)
         {
-            return client.Get<MarksDto>($"api/game/{gameId}");
+            return client.Get<GameDto>($"api/game/{gameId}");
         }
 
         public Task Play(Guid gameId, Cell cell)

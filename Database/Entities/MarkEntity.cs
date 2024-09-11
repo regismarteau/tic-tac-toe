@@ -1,4 +1,4 @@
-﻿namespace Database;
+﻿namespace Database.Entities;
 
 public class MarkEntity
 {
@@ -7,6 +7,8 @@ public class MarkEntity
     public CellValue Cell { get; set; }
 
     public PlayerValue Player { get; set; }
+
+    public GameEntity Game { get; set; } = default!;
 }
 
 public enum CellValue
