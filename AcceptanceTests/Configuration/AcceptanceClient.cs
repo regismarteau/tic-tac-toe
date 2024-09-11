@@ -1,10 +1,21 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http.Json;
 
 namespace AcceptanceTests.Configuration;
 
-public class AcceptanceClient(HttpClient client) : IDisposable
+public class AcceptanceClient : IDisposable
 {
     private bool disposedValue;
+    private readonly HttpClient client;
+    private readonly IServiceScope scopedServices;
+
+    public AcceptanceClient(HttpClient client, IServiceProvider services)
+    {
+        this.client = client;
+        this.scopedServices = services.CreateScope();
+    }
+
+    private AsynchronousSideEffectsAwaiter Awaiter => this.scopedServices.ServiceProvider.GetRequiredService<AsynchronousSideEffectsAwaiter>();
 
     public async Task Post(string path)
     {
@@ -26,15 +37,16 @@ public class AcceptanceClient(HttpClient client) : IDisposable
 
     private async Task<T> GetResponse<T>(HttpRequestMessage request)
     {
-        var response = await SendRequest(request);
+        var response = await this.SendRequest(request);
 
         return (await response.Content.ReadFromJsonAsync<T>()) ?? throw new InvalidOperationException("The response content is null or couldn't be deserialized.");
     }
 
     private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)
     {
-        var response = await client.SendAsync(request);
+        var response = await this.client.SendAsync(request);
         response.EnsureSuccessStatusCode();
+        await Awaiter.WaitForSideEffects();
         return response;
     }
 
@@ -44,7 +56,8 @@ public class AcceptanceClient(HttpClient client) : IDisposable
         {
             if (disposing)
             {
-                client.Dispose();
+                this.client.Dispose();
+                this.scopedServices.Dispose();
             }
 
             this.disposedValue = true;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AcceptanceTests.Configuration;
 
@@ -9,9 +10,11 @@ public class TestServer : IDisposable
 
     public TestServer()
     {
-
-        this.server = new WebApplicationFactory<Program>();
-        this.Client = new(this.server.CreateClient());
+        this.server = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureServices(config => config.AddScoped<AsynchronousSideEffectsAwaiter>());
+        });
+        this.Client = new(this.server.CreateClient(), this.server.Services);
     }
 
     public AcceptanceClient Client { get; }

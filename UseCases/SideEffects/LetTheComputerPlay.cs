@@ -9,6 +9,10 @@ public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame stora
 {
     protected override async Task Handle(CellMarked @event)
     {
+        if (@event.Player == Player.O)
+        {
+            return;
+        }
         var game = await finder.Get(@event.GameId);
         var cellToMark = new UnbeatableMoveFinder(game.TicTacToe).FindBestCellToMark();
         var events = game.Play(Player.O, cellToMark);

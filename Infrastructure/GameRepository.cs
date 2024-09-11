@@ -34,7 +34,7 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
 
     private async Task Persist(Event @event)
     {
-        await dbContext.Outbox.AddAsync(new OutboxEntity
+        await dbContext.Outbox.AddAsync(new OutboxEventEntity
         {
             EventId = Guid.NewGuid(),
             Json = JsonConvert.SerializeObject(@event, new JsonSerializerSettings

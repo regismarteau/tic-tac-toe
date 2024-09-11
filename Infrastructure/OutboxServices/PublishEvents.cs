@@ -24,14 +24,14 @@ namespace Infrastructure.OutboxServices
 
         private static async Task PublishFirstEvent(TicTacToeDbContext dbContext, IMediator mediator, CancellationToken stoppingToken)
         {
+            OutboxEventEntity? @event = null;
             try
             {
-                var @event = await dbContext.Outbox.FirstOrDefaultAsync(stoppingToken);
+                @event = await dbContext.Outbox.FirstOrDefaultAsync(stoppingToken);
                 if (@event is null)
                 {
                     return;
                 }
-                dbContext.Outbox.Remove(@event);
                 var domainEvent = JsonConvert.DeserializeObject<Event>(@event.Json, new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Auto
@@ -40,9 +40,11 @@ namespace Infrastructure.OutboxServices
                 {
                     await mediator.Publish(domainEvent, stoppingToken);
                 }
+                dbContext.Outbox.Remove(@event);
                 await dbContext.SaveChangesAsync(stoppingToken);
             }
-            catch { }
+            catch
+            { }
         }
     }
 }
