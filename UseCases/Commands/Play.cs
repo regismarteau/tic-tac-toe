@@ -1,7 +1,7 @@
 ﻿using Domain.ValueObjects;
 using UseCases.Ports;
 
-namespace UseCases;
+namespace UseCases.Commands;
 
 public record Play(GameId Id, Cell Cell) : ICommand;
 

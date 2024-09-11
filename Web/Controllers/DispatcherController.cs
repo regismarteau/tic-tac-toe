@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
-using UseCases;
+using UseCases.Commands;
 
 namespace Web.Controllers;
 

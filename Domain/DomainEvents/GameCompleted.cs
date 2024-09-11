@@ -2,7 +2,7 @@
 
 namespace Domain.DomainEvents;
 
-public record GameCompleted : IEvent;
+public record GameCompleted : Event;
 
 public record GameWon(Player By) : GameCompleted;
 

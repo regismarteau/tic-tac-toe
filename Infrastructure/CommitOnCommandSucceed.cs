@@ -1,6 +1,6 @@
 ﻿using Database;
 using MediatR;
-using UseCases;
+using UseCases.Commands;
 
 namespace Infrastructure;
 

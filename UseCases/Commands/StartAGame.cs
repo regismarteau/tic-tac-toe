@@ -1,7 +1,7 @@
 ﻿using Domain;
 using UseCases.Ports;
 
-namespace UseCases;
+namespace UseCases.Commands;
 
 public record StartAGame : ICommand<Guid>;
 

@@ -1,7 +1,8 @@
 ﻿using Database;
+using Infrastructure.OutboxServices;
 using Microsoft.Extensions.DependencyInjection;
 using Queries;
-using UseCases;
+using UseCases.Commands;
 using UseCases.Ports;
 
 namespace Infrastructure;
@@ -19,6 +20,7 @@ public static class ConfigureServices
                 .AddOpenBehavior(typeof(CommitOnCommandSucceed<,>), ServiceLifetime.Scoped))
             .AddScoped<IFindGame, GameRepository>()
             .AddScoped<IStoreGame, GameRepository>()
+            .AddHostedService<PublishEvents>()
             .ConfigureDatabase();
     }
 }
