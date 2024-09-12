@@ -1,5 +1,5 @@
 # UnitTests
-Unit tests are directly pluggued to the domain and assert all of the invariants defined by the business.
+Unit tests are directly plugged to the domain and assert all of the invariants defined by the business.
 - They are really fast and so they can be really exhaustive.
 - They have to be focused on business logic only, and should not try to test technical detail if not necessary.
 
