@@ -6,22 +6,18 @@ namespace Domain.ValueObjects;
 public record TicTacToe
 {
     private readonly static IEnumerable<Cell> AllCells = Enum.GetValues<Cell>();
-    private readonly IReadOnlyCollection<Cell> XPlayerCells;
-    private readonly IReadOnlyCollection<Cell> OPlayerCells;
     private readonly bool isFull;
 
     private TicTacToe(IReadOnlyCollection<Mark> marks)
     {
-        this.Marks = marks;
-        this.XPlayerCells = this.Marks.Where(mark => mark.PlayedByX).Select(mark => mark.Cell).ToList();
-        this.OPlayerCells = this.Marks.Where(mark => mark.PlayedByO).Select(mark => mark.Cell).ToList();
-        this.AvailableCells = AllCells.Except(this.XPlayerCells).Except(this.OPlayerCells).ToList();
+        this.Marks = new(marks);
+        this.AvailableCells = AllCells.Except(this.Marks.PlayedCells).ToList();
         this.isFull = this.AvailableCells.Count == 0;
-        this.NextPlayer = this.XPlayerCells.Count == this.OPlayerCells.Count ? Player.X : Player.O;
+        this.NextPlayer = this.Marks.XPlayerCells.Count == this.Marks.OPlayerCells.Count ? Player.X : Player.O;
         this.Result = this.EvaluateResult();
     }
 
-    public IReadOnlyCollection<Mark> Marks { get; }
+    public Marks Marks { get; }
     public IReadOnlyCollection<Cell> AvailableCells { get; }
     public Result Result { get; }
     public Player NextPlayer { get; }
@@ -38,12 +34,12 @@ public record TicTacToe
 
     private Result EvaluateResult()
     {
-        if (this.XPlayerCells.ContainALine())
+        if (this.Marks.XPlayerCells.ContainALine())
         {
             return new WonBy(Player.X);
         }
 
-        if (this.OPlayerCells.ContainALine())
+        if (this.Marks.OPlayerCells.ContainALine())
         {
             return new WonBy(Player.O);
         }
