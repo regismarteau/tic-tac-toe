@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AcceptanceTests.ErrorHandling;
+using Microsoft.Extensions.DependencyInjection;
+using Reqnroll;
 using System.Net.Http.Json;
 
 namespace AcceptanceTests.Configuration;
@@ -7,11 +9,13 @@ public class AcceptanceClient : IDisposable
 {
     private bool disposedValue;
     private readonly HttpClient client;
+    private readonly ScenarioContext context;
     private readonly IServiceScope scopedServices;
 
-    public AcceptanceClient(HttpClient client, IServiceProvider services)
+    public AcceptanceClient(HttpClient client, ScenarioContext context, IServiceProvider services)
     {
         this.client = client;
+        this.context = context;
         this.scopedServices = services.CreateScope();
     }
 
@@ -45,9 +49,24 @@ public class AcceptanceClient : IDisposable
     private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)
     {
         var response = await this.client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-        await Awaiter.WaitForSideEffects();
+        await this.HandleError(response);
+        await this.Awaiter.WaitForSideEffects();
         return response;
+    }
+
+    private async Task HandleError(HttpResponseMessage response)
+    {
+        if (!this.context.IsAnErrorHandlingScenario())
+        {
+            response.EnsureSuccessStatusCode();
+            return;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadFromJsonAsync<AcceptanceError>();
+            this.context.Set(error);
+        }
     }
 
     protected virtual void Dispose(bool disposing)

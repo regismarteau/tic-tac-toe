@@ -4,6 +4,7 @@ using Database.Extensions;
 using Domain;
 using Domain.DomainEvents;
 using Domain.ValueObjects;
+using Infrastructure.Exceptions;
 using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;
 using UseCases.Ports;
@@ -14,14 +15,21 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
 {
     public async Task<Game> Get(GameId id)
     {
-        var marks = await dbContext.Marks
-            .Where(mark => mark.GameId == id.Value)
-            .Select(mark => new Mark(
-                    mark.Player == PlayerValue.X ? Player.X : Player.O,
-                    mark.Cell.Map()))
-            .ToListAsync();
+        var game = await dbContext.Games
+            .ById(id.Value)
+            .Select(game => new
+            {
+                game.Id,
+                Marks = game.Marks.Select(
+                    mark => new Mark(
+                        mark.Player == PlayerValue.X ? Player.X : Player.O,
+                        mark.Cell.Map())).ToList()
+            })
+            .SingleOrDefaultAsync();
 
-        return Game.Rehydrate(id, marks);
+        return Game.Rehydrate(new(
+            game?.Id ?? throw new GameNotFoundException()),
+            game.Marks);
     }
 
     public async Task Store(Events events)

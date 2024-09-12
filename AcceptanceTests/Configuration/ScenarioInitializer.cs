@@ -8,7 +8,7 @@ namespace AcceptanceTests.Configuration
         [BeforeScenario]
         public static void Init(ScenarioContext context)
         {
-            context.Set(new TestServer());
+            context.Set(new TestServer(context));
         }
 
         [AfterScenario]

@@ -1,16 +1,7 @@
-﻿Feature: Play
+﻿Feature: Play versus an unbeatable computer
 	As a player
-	I want to mark a cross
-	In order to attempt to make a line
-
-	
-Scenario: Everytime I play, the computer plays also afterwards
-	Given a game started
-	When I play on top left cell
-	Then the game looks like
-	| X |   |  |
-	|   | O |  |
-	|   |   |  |
+	I want to play versus a computer that can't be defeated
+	In order to attempt to be better than him
 
 Scenario: The computer will attempt to win if I play it wrong
 	Given a game started

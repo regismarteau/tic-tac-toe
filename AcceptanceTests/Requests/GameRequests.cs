@@ -11,7 +11,7 @@ namespace AcceptanceTests.Requests
             return client.Post<Guid>("api/game/start");
         }
 
-        public Task<GameDto> GetAllMarks(Guid gameId)
+        public Task<GameDto> GetGame(Guid gameId)
         {
             return client.Get<GameDto>($"api/game/{gameId}");
         }
