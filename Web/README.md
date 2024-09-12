@@ -1,0 +1,2 @@
+# Web
+This is a small project with as less as possible logic in it. Its main goal is to start the application with all the necessary configuration and be the interface between the user and the system. That's it !

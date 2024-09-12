@@ -1,0 +1,2 @@
+# Database
+A small project only here to enumerated all data used and stored by the system. This is here where is defined the ORM used and its configuration. All of the logic persistence and data gathering are on `Infrastructure` or `Queries`'s side, depending on the context.

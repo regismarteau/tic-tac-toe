@@ -1,5 +1,5 @@
 # Unbeatable Tic Tac Toe
-This is a .NET application exposing endpoints to play to a Tic tac toe game versus a computer that don't want to loose against you!
+This is a .NET application exposing endpoints to play to a Tic tac toe game versus a computer that doesn't want to loose against you!
 
 # Purpose
 This is a repository to illustrate an efficient way to develop Web API at a larger scale. This type of architecture and solutions have already been developed and used in a production environment.
@@ -11,7 +11,7 @@ It uses some of the top modern designs, such as :
 - Acceptance tests
 - etc ...
 
-You'll find useful readmes inside every project's folder to explain every choices and trade-offs in order to try giving hints to replicate on your own projects.
+You'll find useful readmes inside every project's folder to explain noticeable choices, pros, cons and trade-offs.
 
 # Structure
 
@@ -40,6 +40,6 @@ flowchart LR
 ```
 
 # Disclaimer
-Obviously, there are a lot things arguable in this, there are definitively a lot of ways to do this application differently, I don't claim to have the best and only solution! If you think about better ideas or design, feel free to chat with me! :)
+Obviously, there are a lot things arguable in this, there are definitively a lot of ways to do this application differently, I don't pretend to have the best and only solution! If you think about better ideas or design, feel free to chat with me! :)
 
-Also, it still remains a lot of things to do such as error handling, authentication / authorization, external services configuration (db, message broker, logging) but it wasn't the purpose of this work, so it has been deliberately omitted.
+Also, there are quite a lot of things missing such as error handling, authentication / authorization, external services configuration (db, message broker, logging) but it wasn't the purpose of this work, so it has been deliberately omitted.
