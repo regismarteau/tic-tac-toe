@@ -9,6 +9,7 @@ For example here, they represent a good way to test `queries` by dispatching `co
 Well designed, it can provide a living documentation about all of your application's features. This is why I personally use [Reqnroll](https://github.com/reqnroll/Reqnroll) to have the most understable scenarios possible. In a optimistic way, it can lead also to a collaboration with the business to define them and make sure that we are all aligned with the expectations.
 
 ## Notes
+- I've chosen to override eventual consistency by waiting side effects explicitely after each requests as it gives more natural scenarios.
 - They are slower than Unit tests so it has to be taken into account when defining tests. They doesn't fit really well with exhaustivity.
 - There are quite a lot of necessary configuration and tooling to make it usable and sustainable, and it depends a lot on what the framework can provide.
 - With ORM like Entity Framework, it offers good opportunities to test quickly your application without the need to mock all of you repositories, by switching to a InMemory provider.

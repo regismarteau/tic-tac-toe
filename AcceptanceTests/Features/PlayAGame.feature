@@ -1,7 +1,7 @@
 ﻿Feature: Play a game
 	As a player
 	I want to play to Tic Tac Toe
-	'cause this is the best game ever made
+	Because this is the best game ever made
 
 Scenario: Start a game should initialize a new tic tac toe
 	When I start a new game

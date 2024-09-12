@@ -18,7 +18,7 @@ namespace AcceptanceTests.Requests
 
         public Task Play(Guid gameId, Cell cell)
         {
-            return client.Post($"api/game/{gameId}/play/{cell}");
+            return client.Post($"api/game/{gameId}/play/{cell.ToString()}");
         }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AcceptanceTests.Configuration;
 
@@ -43,7 +45,10 @@ public class AcceptanceClient : IDisposable
     {
         var response = await this.SendRequest(request);
 
-        return (await response.Content.ReadFromJsonAsync<T>()) ?? throw new InvalidOperationException("The response content is null or couldn't be deserialized.");
+        return (await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        {
+            Converters = { new JsonStringEnumConverter() }
+        })) ?? throw new InvalidOperationException("The response content is null or couldn't be deserialized.");
     }
 
     private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)

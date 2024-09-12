@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using UseCases.Commands;
 
 namespace Web.Controllers;

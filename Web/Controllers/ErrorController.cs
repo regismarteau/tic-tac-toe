@@ -7,6 +7,7 @@ using System.Net;
 namespace Web.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : ControllerBase
     {
         [Route("error")]
