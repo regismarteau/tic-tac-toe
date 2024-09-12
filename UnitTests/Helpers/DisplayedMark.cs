@@ -5,14 +5,14 @@ namespace UnitTests.Helpers;
 
 public enum DisplayedMark
 {
-    _, 
-    X, 
+    _,
+    X,
     O
 }
 
 public static class DisplayedMarkExtensions
 {
-    public static IEnumerable<Play> AsPlays(this DisplayedMark[] cells)
+    public static IEnumerable<Move> AsMoves(this DisplayedMark[] cells)
     {
         var turn = 0;
         IndexedCellToMark? nextPlayerXCell;
@@ -44,4 +44,4 @@ public static class DisplayedMarkExtensions
     private record IndexedCellToMark(DisplayedMark Cell, int Index);
 }
 
-public record Play(Player Player, Cell Cell);
+public record Move(Player Player, Cell Cell);

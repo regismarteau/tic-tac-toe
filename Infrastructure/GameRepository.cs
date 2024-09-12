@@ -4,8 +4,8 @@ using Database.Extensions;
 using Domain;
 using Domain.DomainEvents;
 using Domain.ValueObjects;
+using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using UseCases.Ports;
 
 namespace Infrastructure;
@@ -29,20 +29,8 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         foreach (var @event in events)
         {
             await this.Handle(@event);
-            await this.Persist(@event);
+            await dbContext.Outbox.AddAsync(@event.Serialize());
         }
-    }
-
-    private async Task Persist(Event @event)
-    {
-        await dbContext.Outbox.AddAsync(new OutboxEventEntity
-        {
-            EventId = Guid.NewGuid(),
-            Json = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            })
-        });
     }
 
     private Task Handle(Event @event)

@@ -1,6 +1,4 @@
-﻿using Domain;
-using Domain.DomainEvents;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
 using Domain.ValueObjects;
 using FluentAssertions;
 using UnitTests.Helpers;
@@ -12,8 +10,6 @@ public class CompletedGameTests
     protected const DisplayedMark X = DisplayedMark.X;
     protected const DisplayedMark O = DisplayedMark.O;
     protected const DisplayedMark _ = DisplayedMark._;
-    private static readonly GameId Id = GameId.New();
-    private readonly Game game = Game.Rehydrate(Id, []);
 
     [Theory]
     [InlineData([
@@ -50,9 +46,9 @@ public class CompletedGameTests
         X, _, _])]
     public void ThePlayerXWinsTheGameWhenALineIsDrawn(params DisplayedMark[] cells)
     {
-        this.PlayAGame(cells)
+        ResultFrom(cells)
             .Should()
-            .Be(new GameWon(Id, Player.X));
+            .Be(new WonBy(Player.X));
     }
 
     [Theory]
@@ -68,9 +64,9 @@ public class CompletedGameTests
         ])]
     public void ThePlayerOWinsTheGameWhenALineIsDrawn(params DisplayedMark[] cells)
     {
-        this.PlayAGame(cells)
+        ResultFrom(cells)
             .Should()
-            .Be(new GameWon(Id, Player.O));
+            .Be(new WonBy(Player.O));
     }
 
     [Theory]
@@ -96,20 +92,20 @@ public class CompletedGameTests
         ])]
     public void ItIsPossibleThatNoOneWins(params DisplayedMark[] cells)
     {
-        this.PlayAGame(cells)
+        ResultFrom(cells)
             .Should()
-            .Be(new GameResultedAsADraw(Id));
+            .Be(new Draw());
     }
 
     [Fact]
     public void ItIsImpossibleToMarkAnotherCellAfterAVictory()
     {
-        this.PlayAGame([
+        var ticTacToe = PlayAGame([
             X, X, X,
             O, O, _,
             _, _, _]);
 
-        this.Invoking(self => self.game.Play(Player.O, Cell.Right))
+        this.Invoking(self => ticTacToe.Play(new(Player.O, Cell.Right)))
             .Should()
             .ThrowExactly<GameAlreadyCompletedException>();
     }
@@ -117,28 +113,26 @@ public class CompletedGameTests
     [Fact]
     public void AGameIsNotYetCompletedIfAnotherPlayIsPossible()
     {
-        this.game
-            .Play(Player.X, Cell.Left)
-            .OfType<GameCompleted>()
+        TicTacToe.New()
+            .Play(new(Player.X, Cell.Left))
+            .Result
             .Should()
-            .BeEmpty();
+            .BeOfType<Undetermined>();
     }
 
-    private GameCompleted? PlayAGame(DisplayedMark[] cells)
+    private static Result ResultFrom(DisplayedMark[] cells)
     {
-        foreach (var play in cells.AsPlays())
-        {
-            var gameCompleted = this.game
-                .Play(play.Player, play.Cell)
-                .OfType<GameCompleted>()
-                .FirstOrDefault();
+        return PlayAGame(cells).Result;
+    }
 
-            if (gameCompleted is not null)
-            {
-                return gameCompleted;
-            }
+    private static TicTacToe PlayAGame(DisplayedMark[] cells)
+    {
+        var ticTacToe = TicTacToe.New();
+        foreach (var play in cells.AsMoves())
+        {
+            ticTacToe = ticTacToe.Play(new(play.Player, play.Cell));
         }
 
-        return null;
+        return ticTacToe;
     }
 }

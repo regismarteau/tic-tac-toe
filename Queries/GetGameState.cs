@@ -11,7 +11,8 @@ public class GetGameStateQueryHandler(TicTacToeDbContext dbContext) : QueryHandl
 {
     protected override async Task<GameDto> Handle(GetGameState command)
     {
-        return await dbContext.Games.ById(command.Id)
+        return await dbContext.Games
+            .ById(command.Id)
             .Select(game => new GameDto(
                 (ResultDto)game.Result,
                 game.Marks.Select(mark => new MarkDto((SymbolDto)mark.Player, (CellDto)mark.Cell)).ToList()))

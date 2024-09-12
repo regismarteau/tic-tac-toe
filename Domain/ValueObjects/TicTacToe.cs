@@ -1,9 +1,11 @@
 ﻿using Domain.Exceptions;
+using Domain.Services;
 
 namespace Domain.ValueObjects;
 
-public class TicTacToe
+public record TicTacToe
 {
+    private readonly static IEnumerable<Cell> AllCells = Enum.GetValues<Cell>();
     private readonly IReadOnlyCollection<Cell> XPlayerCells;
     private readonly IReadOnlyCollection<Cell> OPlayerCells;
     private readonly bool isFull;
@@ -11,22 +13,20 @@ public class TicTacToe
     private TicTacToe(IReadOnlyCollection<Mark> marks)
     {
         this.Marks = marks;
-
-        var marksByPlayer = this.Marks.GroupBy(mark => mark.Player).ToList();
-        this.XPlayerCells = marksByPlayer.SingleOrDefault(player => player.Key == Player.X)?.Select(mark => mark.Cell).ToList() ?? [];
-        this.OPlayerCells = marksByPlayer.SingleOrDefault(player => player.Key == Player.O)?.Select(mark => mark.Cell).ToList() ?? [];
-        this.AvailableCells = Enum.GetValues<Cell>().Except(this.XPlayerCells).Except(this.OPlayerCells).ToList();
+        this.XPlayerCells = this.Marks.Where(mark => mark.PlayedByX).Select(mark => mark.Cell).ToList();
+        this.OPlayerCells = this.Marks.Where(mark => mark.PlayedByO).Select(mark => mark.Cell).ToList();
+        this.AvailableCells = AllCells.Except(this.XPlayerCells).Except(this.OPlayerCells).ToList();
         this.isFull = this.AvailableCells.Count == 0;
+        this.NextPlayer = this.XPlayerCells.Count == this.OPlayerCells.Count ? Player.X : Player.O;
         this.Result = this.EvaluateResult();
     }
 
     public IReadOnlyCollection<Mark> Marks { get; }
-
     public IReadOnlyCollection<Cell> AvailableCells { get; }
-
     public Result Result { get; }
+    public Player NextPlayer { get; }
 
-    public static TicTacToe Init()
+    public static TicTacToe New()
     {
         return new([]);
     }
@@ -56,14 +56,14 @@ public class TicTacToe
         return new Undetermined();
     }
 
-    public TicTacToe Mark(Mark mark)
+    public TicTacToe Play(Mark mark)
     {
         if (this.Result is Completed)
         {
             throw new GameAlreadyCompletedException();
         }
 
-        if (mark.Player != this.GetNextPlayer())
+        if (mark.Player != this.NextPlayer)
         {
             throw new BadPlayerException();
         }
@@ -74,15 +74,5 @@ public class TicTacToe
         }
 
         return new([.. this.Marks, mark]);
-    }
-
-    public Player GetNextPlayer()
-    {
-        if (this.Marks.Count == 0)
-        {
-            return Player.X;
-        }
-
-        return this.XPlayerCells.Count == this.OPlayerCells.Count ? Player.X : Player.O;
     }
 }

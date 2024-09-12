@@ -13,7 +13,7 @@ public class Game
     }
 
     public GameId Id { get; }
-    public TicTacToe TicTacToe { get; private set; }
+    public TicTacToe TicTacToe { get; }
 
     public static Game Rehydrate(GameId id, IReadOnlyCollection<Mark> marks)
     {
@@ -27,10 +27,10 @@ public class Game
 
     public Events Play(Player player, Cell cell)
     {
-        this.TicTacToe = this.TicTacToe.Mark(new(player, cell));
+        var newTicTacToe = this.TicTacToe.Play(new(player, cell));
         var events = Events.Raise(new CellMarked(this.Id, player, cell));
 
-        return this.TicTacToe.Result switch
+        return newTicTacToe.Result switch
         {
             WonBy by => events.Add(new GameWon(this.Id, by.Player)),
             Draw => events.Add(new GameResultedAsADraw(this.Id)),

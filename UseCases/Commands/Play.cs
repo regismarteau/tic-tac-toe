@@ -1,4 +1,5 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Services;
+using Domain.ValueObjects;
 using UseCases.Ports;
 
 namespace UseCases.Commands;
@@ -10,7 +11,7 @@ public class PlayCommandHandler(IFindGame finder, IStoreGame store) : CommandHan
     protected override async Task Handle(Play command)
     {
         var game = await finder.Get(command.Id);
-        var events = game.Play(Player.X, command.Cell);
+        var events = game.Play(UserVersusComputer.User, command.Cell);
         await store.Store(events);
     }
 }

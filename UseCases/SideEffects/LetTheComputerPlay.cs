@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.DomainEvents;
+﻿using Domain.DomainEvents;
+using Domain.Services;
 using Domain.ValueObjects;
 using UseCases.Ports;
 
@@ -9,7 +9,7 @@ public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame stora
 {
     protected override async Task Handle(CellMarked @event)
     {
-        if (@event.Player == Player.O)
+        if (@event.PlayedByComputer())
         {
             return;
         }
@@ -20,7 +20,7 @@ public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame stora
         }
 
         var cellToMark = new UnbeatablePlayFinder(game.TicTacToe).FindBestCellToMark();
-        var events = game.Play(Player.O, cellToMark);
+        var events = game.Play(UserVersusComputer.Computer, cellToMark);
         await storage.Store(events);
     }
 }
