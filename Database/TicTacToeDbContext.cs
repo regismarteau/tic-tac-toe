@@ -1,9 +1,10 @@
 ﻿using Database.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Database;
 
-public class TicTacToeDbContext(DbContextOptions options) : DbContext(options)
+public class TicTacToeDbContext(DbContextOptions<TicTacToeDbContext> options) : DbContext(options)
 {
     public DbSet<GameEntity> Games { get; set; }
     public DbSet<MarkEntity> Marks { get; set; }

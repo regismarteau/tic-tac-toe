@@ -5,7 +5,6 @@ namespace Domain;
 
 public class Game
 {
-
     private Game(GameId id, TicTacToe ticTacToe)
     {
         this.Id = id;

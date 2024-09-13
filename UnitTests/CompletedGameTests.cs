@@ -128,9 +128,9 @@ public class CompletedGameTests
     private static TicTacToe PlayAGame(DisplayedMark[] cells)
     {
         var ticTacToe = TicTacToe.New();
-        foreach (var play in cells.AsMoves())
+        foreach (var move in cells.AsMoves())
         {
-            ticTacToe = ticTacToe.Play(new(play.Player, play.Cell));
+            ticTacToe = ticTacToe.Play(new(move.Player, move.Cell));
         }
 
         return ticTacToe;

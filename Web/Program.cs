@@ -1,3 +1,4 @@
+using Database.Migrations;
 using Infrastructure;
 using System.Text.Json.Serialization;
 
@@ -12,7 +13,7 @@ builder.Services
     .AddTicTacToeServices(builder.Configuration);
 
 var app = builder.Build();
-
+await app.Services.GetRequiredService<IMigrateDatabase>().Migrate();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

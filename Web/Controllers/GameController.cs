@@ -2,8 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using UseCases.Commands;
 
 namespace Web.Controllers;
@@ -19,7 +17,7 @@ public class GameController(IMediator mediator) : DispatcherController(mediator)
     }
 
     [HttpGet("{gameId:guid}")]
-    public Task<ActionResult<GameDto>> GetAllMarks([FromRoute] Guid gameId)
+    public Task<ActionResult<GameDto>> GetGameState([FromRoute] Guid gameId)
     {
         return this.Dispatch(new GetGameState(gameId));
     }
