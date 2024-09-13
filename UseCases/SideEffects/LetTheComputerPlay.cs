@@ -1,6 +1,6 @@
 ﻿using Domain.DomainEvents;
-using Domain.Services;
-using Domain.ValueObjects;
+using Domain.Gameplay;
+using Domain.UnbeatableComputer;
 using UseCases.Ports;
 
 namespace UseCases.SideEffects;

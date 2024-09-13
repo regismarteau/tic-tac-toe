@@ -1,5 +1,4 @@
-﻿using Domain.Exceptions;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Domain.ValueObjects;
 

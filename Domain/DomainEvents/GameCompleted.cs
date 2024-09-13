@@ -1,4 +1,4 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Gameplay;
 
 namespace Domain.DomainEvents;
 

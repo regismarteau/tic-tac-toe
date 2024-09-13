@@ -1,7 +1,6 @@
-﻿using Domain.Services;
-using Domain.ValueObjects;
+﻿using Domain.ValueObjects;
 
-namespace Domain.Services;
+namespace Domain.ValueObjects;
 
 internal static class LineEvaluator
 {

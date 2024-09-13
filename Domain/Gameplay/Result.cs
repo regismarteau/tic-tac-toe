@@ -1,4 +1,4 @@
-﻿namespace Domain.ValueObjects;
+﻿namespace Domain.Gameplay;
 
 public abstract record Result;
 public abstract record Completed : Result;

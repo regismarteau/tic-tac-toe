@@ -1,7 +1,7 @@
 ﻿using Domain.DomainEvents;
-using Domain.ValueObjects;
+using Domain.Gameplay;
 
-namespace Domain.Services;
+namespace Domain.UnbeatableComputer;
 
 public static class UserVersusComputer
 {

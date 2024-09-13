@@ -1,6 +1,7 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Gameplay;
+using Domain.ValueObjects;
 
-namespace Domain.Services;
+namespace Domain.UnbeatableComputer;
 
 public class UnbeatablePlayFinder
 {

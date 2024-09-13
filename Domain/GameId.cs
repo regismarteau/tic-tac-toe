@@ -1,4 +1,4 @@
-﻿namespace Domain.ValueObjects;
+﻿namespace Domain;
 
 public record GameId(Guid Value)
 {
