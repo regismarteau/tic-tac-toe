@@ -10,40 +10,40 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
 {
     private Guid GameId
     {
-        get => this.Context.Get<Guid>();
-        set => this.Context.Set(value);
+        get => Context.Get<Guid>();
+        set => Context.Set(value);
     }
 
     [Given("a game started")]
     [When("I start a new game")]
     public async Task WhenIStartANewGame()
     {
-        this.GameId = await this.GameRequests.Start();
+        GameId = await GameRequests.Start();
     }
 
     [When("^I play on (.+?) cell$")]
     public async Task WhenIPlayOnTopLeftCell(Cell cell)
     {
-        await this.GameRequests.Play(this.GameId, cell);
+        await GameRequests.Play(GameId, cell);
     }
 
     [When("I attempt to play an unknown game")]
     public async Task WhenIAttemptToPlayAnUnknownGame()
     {
-        await this.GameRequests.Play(Guid.NewGuid(), Cell.TopLeft);
+        await GameRequests.Play(Guid.NewGuid(), Cell.TopLeft);
     }
 
     [Then("the game looks like")]
     public async Task ThenTheGameLooksLike(DataTable table)
     {
-        var game = await this.GameRequests.GetGame(this.GameId);
+        var game = await GameRequests.GetGame(GameId);
         game.Marks.Should().BeEquivalentTo(ToMarks(table));
     }
 
     [Then("the game ends in a draw")]
     public async Task ThenTheGameEndsInADraw(DataTable table)
     {
-        var game = await this.GameRequests.GetGame(this.GameId);
+        var game = await GameRequests.GetGame(GameId);
         game.Marks.Should().BeEquivalentTo(ToMarks(table));
         game.Result.Should().Be(ResultDto.Draw);
     }
@@ -51,7 +51,7 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
     [Then("^the game has been won by (me|the computer)$")]
     public async Task ThenTheGameHasBeenWonBy(string winner, DataTable table)
     {
-        var game = await this.GameRequests.GetGame(this.GameId);
+        var game = await GameRequests.GetGame(GameId);
         game.Marks.Should().BeEquivalentTo(ToMarks(table));
         game.Result.Should().Be(winner == "me" ? ResultDto.WonByPlayerX : ResultDto.WonByPlayerO);
     }

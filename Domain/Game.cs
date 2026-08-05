@@ -8,8 +8,8 @@ public class Game
 {
     private Game(GameId id, TicTacToe ticTacToe)
     {
-        this.Id = id;
-        this.TicTacToe = ticTacToe;
+        Id = id;
+        TicTacToe = ticTacToe;
     }
 
     public GameId Id { get; }
@@ -27,13 +27,13 @@ public class Game
 
     public Events Play(Player player, Cell cell)
     {
-        var newTicTacToe = this.TicTacToe.Play(new(player, cell));
-        var events = Events.Raise(new CellMarked(this.Id, player, cell));
+        var newTicTacToe = TicTacToe.Play(new(player, cell));
+        var events = Events.Raise(new CellMarked(Id, player, cell));
 
         return newTicTacToe.Result switch
         {
-            WonBy by => events.Add(new GameWon(this.Id, by.Player)),
-            Draw => events.Add(new GameResultedAsADraw(this.Id)),
+            WonBy by => events.Add(new GameWon(Id, by.Player)),
+            Draw => events.Add(new GameResultedAsADraw(Id)),
             _ => events
         };
     }

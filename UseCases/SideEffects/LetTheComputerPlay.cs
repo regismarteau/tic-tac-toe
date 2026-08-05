@@ -1,13 +1,14 @@
 ﻿using Domain.DomainEvents;
 using Domain.Gameplay;
 using Domain.UnbeatableComputer;
+using RMediator.Abstractions;
 using UseCases.Ports;
 
 namespace UseCases.SideEffects;
 
-public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame storage) : DomainEventHandler<CellMarked>
+public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame storage) : IListenToDomainEvent<CellMarked>
 {
-    protected override async Task Handle(CellMarked @event)
+    public async Task Listen(CellMarked @event, CancellationToken cancellationToken)
     {
         if (@event.PlayedByComputer())
         {

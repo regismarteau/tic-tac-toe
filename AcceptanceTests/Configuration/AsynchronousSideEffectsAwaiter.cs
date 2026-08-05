@@ -1,6 +1,5 @@
 ﻿using Database;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace AcceptanceTests.Configuration;
 

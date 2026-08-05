@@ -13,8 +13,8 @@ namespace Web.Controllers
         [Route("error")]
         public IActionResult HandleError()
         {
-            var handler = this.HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-            return this.Problem(
+            var handler = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+            return Problem(
                 statusCode: (int)GetCode(handler.Error),
                 detail: handler.Error.Message,
                 title: handler.Error.GetType().Name);

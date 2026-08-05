@@ -9,7 +9,7 @@ public class BaseSteps(ScenarioContext context)
 {
     protected ScenarioContext Context { get; } = context;
 
-    protected GameRequests GameRequests => new(this.Client);
+    protected GameRequests GameRequests => new(Client);
 
-    private AcceptanceClient Client => this.Context.Get<TestServer>().Client;
+    private AcceptanceClient Client => Context.Get<TestServer>().Client;
 }

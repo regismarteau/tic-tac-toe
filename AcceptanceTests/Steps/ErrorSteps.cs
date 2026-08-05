@@ -15,7 +15,7 @@ public class ErrorSteps : BaseSteps
     [Then("^an (.+) error occured$")]
     public void ThenAnCellAlreadyMarkedExceptionErrorOccured(string error)
     {
-        var acceptanceError = this.context.Get<AcceptanceError>();
+        var acceptanceError = context.Get<AcceptanceError>();
         acceptanceError.Detail.Should().Be(error);
     }
 }

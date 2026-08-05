@@ -3,6 +3,7 @@ using Infrastructure.OutboxServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Queries;
+using RMediator.DependencyInjection;
 using UseCases.Commands;
 using UseCases.Ports;
 
@@ -22,12 +23,11 @@ public static class ConfigureServices
     private static IServiceCollection AddDispatcher(this IServiceCollection services)
     {
         return services
-            .AddMediatR(config =>
-                config
-                .RegisterServicesFromAssemblies(
+            .AddMediator(config =>
+                config.ScanAssemblies(
                     typeof(StartAGame).Assembly,
                     typeof(GetGameState).Assembly)
-                .AddOpenBehavior(typeof(CommitOnCommandSucceed<,>), ServiceLifetime.Scoped));
+                .AddMiddlewares(typeof(CommitOnCommandSucceed<,>), typeof(CommitOnCommandSucceed<>)));
     }
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)

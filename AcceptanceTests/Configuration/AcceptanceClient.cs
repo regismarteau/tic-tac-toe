@@ -18,32 +18,32 @@ public class AcceptanceClient : IDisposable
     {
         this.client = client;
         this.context = context;
-        this.scopedServices = services.CreateScope();
+        scopedServices = services.CreateScope();
     }
 
-    private AsynchronousSideEffectsAwaiter Awaiter => this.scopedServices.ServiceProvider.GetRequiredService<AsynchronousSideEffectsAwaiter>();
+    private AsynchronousSideEffectsAwaiter Awaiter => scopedServices.ServiceProvider.GetRequiredService<AsynchronousSideEffectsAwaiter>();
 
     public async Task Post(string path)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, path);
-        await this.SendRequest(request);
+        await SendRequest(request);
     }
 
     public async Task<T> Post<T>(string path)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, path);
-        return await this.GetResponse<T>(request);
+        return await GetResponse<T>(request);
     }
 
     public async Task<T> Get<T>(string path)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, path);
-        return await this.GetResponse<T>(request);
+        return await GetResponse<T>(request);
     }
 
     private async Task<T> GetResponse<T>(HttpRequestMessage request)
     {
-        var response = await this.SendRequest(request);
+        var response = await SendRequest(request);
 
         return (await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
@@ -53,15 +53,15 @@ public class AcceptanceClient : IDisposable
 
     private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)
     {
-        var response = await this.client.SendAsync(request);
-        await this.HandleError(response);
-        await this.Awaiter.WaitForSideEffects();
+        var response = await client.SendAsync(request);
+        await HandleError(response);
+        await Awaiter.WaitForSideEffects();
         return response;
     }
 
     private async Task HandleError(HttpResponseMessage response)
     {
-        if (!this.context.IsAnErrorHandlingScenario())
+        if (!context.IsAnErrorHandlingScenario())
         {
             response.EnsureSuccessStatusCode();
             return;
@@ -70,27 +70,27 @@ public class AcceptanceClient : IDisposable
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadFromJsonAsync<AcceptanceError>();
-            this.context.Set(error);
+            context.Set(error);
         }
     }
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (!disposedValue)
         {
             if (disposing)
             {
-                this.client.Dispose();
-                this.scopedServices.Dispose();
+                client.Dispose();
+                scopedServices.Dispose();
             }
 
-            this.disposedValue = true;
+            disposedValue = true;
         }
     }
 
     public void Dispose()
     {
-        this.Dispose(disposing: true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 }

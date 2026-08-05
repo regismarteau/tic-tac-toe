@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
     <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="RMediator.DependencyInjection" />
   </ItemGroup>
 
   <ItemGroup>

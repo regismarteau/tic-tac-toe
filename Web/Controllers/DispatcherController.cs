@@ -1,25 +1,23 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Queries;
-using UseCases.Commands;
+﻿using Microsoft.AspNetCore.Mvc;
+using RMediator.Abstractions;
 
 namespace Web.Controllers;
 
-public abstract class DispatcherController(IMediator mediator) : ControllerBase
+public abstract class DispatcherController(IDispatchCommand commandDispatcher, IDispatchQuery queryDispatcher) : ControllerBase
 {
     protected async Task<ActionResult> Dispatch(ICommand command)
     {
-        await mediator.Send(command);
-        return this.Ok();
+        await commandDispatcher.Dispatch(command);
+        return Ok();
     }
 
     protected async Task<ActionResult<T>> Dispatch<T>(ICommand<T> command)
     {
-        return this.Ok(await mediator.Send(command));
+        return Ok(await commandDispatcher.Dispatch(command));
     }
 
     protected async Task<ActionResult<T>> Dispatch<T>(IQuery<T> query)
     {
-        return this.Ok(await mediator.Send(query));
+        return Ok(await queryDispatcher.Dispatch(query));
     }
 }

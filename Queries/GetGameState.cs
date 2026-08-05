@@ -2,21 +2,22 @@
 using Database;
 using Database.Extensions;
 using Microsoft.EntityFrameworkCore;
+using RMediator.Abstractions;
 
 namespace Queries;
 
 public record GetGameState(Guid Id) : IQuery<GameDto>;
 
-public class GetGameStateQueryHandler(TicTacToeDbContext dbContext) : QueryHandler<GetGameState, GameDto>
+public class GetGameStateQueryHandler(TicTacToeDbContext dbContext) : IHandleQuery<GetGameState, GameDto>
 {
-    protected override async Task<GameDto> Handle(GetGameState command)
+    public async Task<GameDto> Handle(GetGameState command, CancellationToken cancellationToken)
     {
         return await dbContext.Games
             .ById(command.Id)
             .Select(game => new GameDto(
                 (ResultDto)game.Result,
                 game.Marks.Select(mark => new MarkDto((SymbolDto)mark.Player, (CellDto)mark.Cell)).ToList()))
-            .SingleAsync();
+            .SingleAsync(cancellationToken);
     }
 }
 

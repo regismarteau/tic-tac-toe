@@ -1,12 +1,12 @@
 ﻿using Database.Entities;
-using Domain.DomainEvents;
 using Newtonsoft.Json;
+using RMediator.Abstractions;
 
 namespace Infrastructure.OutboxServices;
 
 public static class OutboxSerializer
 {
-    public static OutboxEventEntity Serialize(this Event @event)
+    public static OutboxEventEntity Serialize(this IDomainEvent @event)
     {
         return new OutboxEventEntity
         {
@@ -18,9 +18,9 @@ public static class OutboxSerializer
         };
     }
 
-    public static Event Deserialize(this OutboxEventEntity entity)
+    public static IDomainEvent Deserialize(this OutboxEventEntity entity)
     {
-        return JsonConvert.DeserializeObject<Event>(entity.Json, new JsonSerializerSettings
+        return JsonConvert.DeserializeObject<IDomainEvent>(entity.Json, new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto
         }) ?? throw new InvalidOperationException("Unable to deserialize event");

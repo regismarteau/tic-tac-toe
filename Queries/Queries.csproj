@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" />
+    <PackageReference Include="RMediator.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>

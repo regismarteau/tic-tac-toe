@@ -8,6 +8,7 @@ using Domain.ValueObjects;
 using Infrastructure.Exceptions;
 using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;
+using RMediator.Abstractions;
 using UseCases.Ports;
 
 namespace Infrastructure;
@@ -37,19 +38,19 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
     {
         foreach (var @event in events)
         {
-            await this.Handle(@event);
+            await Handle(@event);
             await dbContext.Outbox.AddAsync(@event.Serialize());
         }
     }
 
-    private Task Handle(Event @event)
+    private Task Handle(IDomainEvent @event)
     {
         return @event switch
         {
-            GameStarted started => this.Handle(started),
-            CellMarked marked => this.Handle(marked),
-            GameWon won => this.Handle(won),
-            GameResultedAsADraw draw => this.Handle(draw),
+            GameStarted started => Handle(started),
+            CellMarked marked => Handle(marked),
+            GameWon won => Handle(won),
+            GameResultedAsADraw draw => Handle(draw),
             _ => Task.CompletedTask,
         };
     }
@@ -65,13 +66,13 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
 
     private async Task Handle(GameWon won)
     {
-        var game = await this.GetEntity(won.Id);
+        var game = await GetEntity(won.Id);
         game.Result = won.By == Player.X ? ResultValue.WonByPlayerX : ResultValue.WonByPlayerO;
     }
 
     private async Task Handle(GameResultedAsADraw draw)
     {
-        var game = await this.GetEntity(draw.Id);
+        var game = await GetEntity(draw.Id);
         game.Result = ResultValue.Draw;
     }
 

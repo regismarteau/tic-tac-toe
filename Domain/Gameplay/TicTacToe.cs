@@ -10,11 +10,11 @@ public record TicTacToe
 
     private TicTacToe(IReadOnlyCollection<Mark> marks)
     {
-        this.Marks = new(marks);
-        this.AvailableCells = AllCells.Except(this.Marks.PlayedCells).ToList();
-        this.isFull = this.AvailableCells.Count == 0;
-        this.NextPlayer = this.Marks.XPlayerCells.Count == this.Marks.OPlayerCells.Count ? Player.X : Player.O;
-        this.Result = this.EvaluateResult();
+        Marks = new(marks);
+        AvailableCells = AllCells.Except(Marks.PlayedCells).ToList();
+        isFull = AvailableCells.Count == 0;
+        NextPlayer = Marks.XPlayerCells.Count == Marks.OPlayerCells.Count ? Player.X : Player.O;
+        Result = EvaluateResult();
     }
 
     public Marks Marks { get; }
@@ -34,17 +34,17 @@ public record TicTacToe
 
     private Result EvaluateResult()
     {
-        if (this.Marks.XPlayerCells.ContainALine())
+        if (Marks.XPlayerCells.ContainALine())
         {
             return new WonBy(Player.X);
         }
 
-        if (this.Marks.OPlayerCells.ContainALine())
+        if (Marks.OPlayerCells.ContainALine())
         {
             return new WonBy(Player.O);
         }
 
-        if (this.isFull)
+        if (isFull)
         {
             return new Draw();
         }
@@ -54,21 +54,21 @@ public record TicTacToe
 
     public TicTacToe Play(Mark mark)
     {
-        if (this.Result is Completed)
+        if (Result is Completed)
         {
             throw new GameAlreadyCompletedException();
         }
 
-        if (mark.Player != this.NextPlayer)
+        if (mark.Player != NextPlayer)
         {
             throw new BadPlayerException();
         }
 
-        if (!this.AvailableCells.Contains(mark.Cell))
+        if (!AvailableCells.Contains(mark.Cell))
         {
             throw new CellAlreadyMarkedException();
         }
 
-        return new([.. this.Marks, mark]);
+        return new([.. Marks, mark]);
     }
 }

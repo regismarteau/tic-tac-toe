@@ -1,41 +1,34 @@
-﻿using MediatR;
+﻿using RMediator.Abstractions;
 using System.Collections;
 
 namespace Domain.DomainEvents;
 
-public record Event : INotification;
-
-public class Events : IEnumerable<Event>
+public class Events : IEnumerable<IDomainEvent>
 {
-    private readonly IReadOnlyCollection<Event> events;
+    private readonly IReadOnlyCollection<IDomainEvent> events;
 
-    private Events(IReadOnlyCollection<Event> events)
+    private Events(IReadOnlyCollection<IDomainEvent> events)
     {
         this.events = events;
     }
 
-    public static Events Raise(Event @event)
+    public static Events Raise(IDomainEvent @event)
     {
         return new([@event]);
     }
 
-    public Events Add(Event @event)
+    public Events Add(IDomainEvent @event)
     {
-        return new([.. this.events, @event]);
+        return new([.. events, @event]);
     }
 
-    public IEnumerator<Event> GetEnumerator()
+    public IEnumerator<IDomainEvent> GetEnumerator()
     {
-        return this.events.GetEnumerator();
+        return events.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return this.events.GetEnumerator();
-    }
-
-    public static implicit operator Events(Event @event)
-    {
-        return new([@event]);
+        return events.GetEnumerator();
     }
 }

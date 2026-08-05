@@ -11,30 +11,30 @@ public class TestServer : IDisposable
 
     public TestServer(ScenarioContext context)
     {
-        this.server = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder
+        server = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder
             .ConfigureTestServices(config => config.SubstituteServices()));
 
-        this.Client = new(this.server.CreateClient(), context, this.server.Services);
+        Client = new(server.CreateClient(), context, server.Services);
     }
 
     public AcceptanceClient Client { get; }
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (!disposedValue)
         {
             if (disposing)
             {
-                this.Client.Dispose();
-                this.server.Dispose();
+                Client.Dispose();
+                server.Dispose();
             }
-            this.disposedValue = true;
+            disposedValue = true;
         }
     }
 
     public void Dispose()
     {
-        this.Dispose(disposing: true);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 }

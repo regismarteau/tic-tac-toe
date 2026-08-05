@@ -1,3 +1,5 @@
-﻿namespace Domain.DomainEvents;
+﻿using RMediator.Abstractions;
 
-public record GameStarted(GameId Id) : Event;
+namespace Domain.DomainEvents;
+
+public record GameStarted(GameId Id) : IDomainEvent;

@@ -1,16 +1,18 @@
 ﻿using Domain;
+using Domain.DomainEvents;
+using RMediator.Abstractions;
 using UseCases.Ports;
 
 namespace UseCases.Commands;
 
 public record StartAGame : ICommand<Guid>;
 
-public class StartAGameCommandHandler(IStoreGame store) : CommandHandler<StartAGame, Guid>
+public class StartAGameCommandHandler(IStoreGame store) : IHandleCommand<StartAGame, Guid>
 {
-    protected override async Task<Guid> Handle(StartAGame command)
+    public async Task<Guid> Handle(StartAGame command, CancellationToken cancellationToken)
     {
         var gameStarted = Game.Start();
-        await store.Store(gameStarted);
+        await store.Store(Events.Raise(gameStarted));
         return gameStarted.Id.Value;
     }
 }
