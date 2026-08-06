@@ -19,16 +19,7 @@ public class CommitOnCommandSucceed<TCommand>(TicTacToeDbContext dbContext) : IH
 {
     public async Task Handle(TCommand request, NextMiddleware next, CancellationToken cancellationToken)
     {
-        try
-        {
-            await next(request, cancellationToken);
-
-        }
-        catch (Exception ex)
-        {
-
-            throw;
-        }
+        await next(request, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
