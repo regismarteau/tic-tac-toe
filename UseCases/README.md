@@ -11,4 +11,4 @@ For example here, the smallest business transaction of this game is a move done 
 In that case, the computer's move is more like a `reaction` to the user move and can be performed afterwards in a asynchronous process.
 
 ## Notes
-To handle easily commands and side effect processes, I use [MediatR](https://github.com/jbogard/MediatR) which is a pretty good package.
+To handle easily commands and side effect processes, I use [RMediator](https://github.com/regismarteau/rmediator) which is a library based on the old free-to-use MediatR package.
