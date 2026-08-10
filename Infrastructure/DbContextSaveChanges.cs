@@ -11,6 +11,10 @@ public class DbContextSaveChanges(TicTacToeDbContext dbContext, DomainEventToPub
     {
         var domainEventsInsertedCount = dbContext.ChangeTracker.Entries<OutboxEventEntity>().Count(e => e.State == EntityState.Added);
         await dbContext.SaveChangesAsync(cancellationToken);
-        awaiter.NotifyForDomainEventsToPublish(domainEventsInsertedCount);
+
+        if (domainEventsInsertedCount > 0)
+        {
+            awaiter.NotifyForDomainEventsToPublish(domainEventsInsertedCount);
+        }
     }
 }
