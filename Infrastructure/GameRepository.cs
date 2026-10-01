@@ -1,11 +1,11 @@
 using Database;
 using Database.Entities;
+using Database.Exceptions;
 using Database.Extensions;
 using Domain;
 using Domain.DomainEvents;
 using Domain.Gameplay;
 using Domain.ValueObjects;
-using Infrastructure.Exceptions;
 using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;
 using RMediator.Abstractions;

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
@@ -23,7 +24,7 @@ public class GameController(IDispatchCommand commandDispatcher, IDispatchQuery q
     }
 
     [HttpPost("{gameId:guid}/play/{cell}")]
-    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute] Cell cell)
+    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute, EnumDataType(typeof(Cell))] Cell cell)
     {
         return await Dispatch(new Play(new(gameId), cell));
     }

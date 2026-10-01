@@ -1,10 +1,11 @@
 using Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RMediator.Abstractions;
 
 namespace Infrastructure.OutboxServices;
 
-public class EventsPublisher(TicTacToeDbContext dbContext, DomainEventToPublishAwaiter awaiter, DbContextSaveChanges changes, IPublishDomainEvent publisher)
+public class EventsPublisher(TicTacToeDbContext dbContext, DomainEventToPublishAwaiter awaiter, DbContextSaveChanges changes, IPublishDomainEvent publisher, ILogger<EventsPublisher> logger)
 {
     public async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -29,7 +30,9 @@ public class EventsPublisher(TicTacToeDbContext dbContext, DomainEventToPublishA
             dbContext.Outbox.Remove(eventEntity);
             await changes.SaveAsync(stoppingToken);
         }
-        catch
-        { }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            logger.LogError(exception, "Publication of an outbox event failed");
+        }
     }
 }
