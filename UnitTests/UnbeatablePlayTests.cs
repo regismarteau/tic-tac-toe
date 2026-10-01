@@ -1,6 +1,5 @@
 using Domain.Gameplay;
 using Domain.UnbeatableComputer;
-using Domain.ValueObjects;
 using FluentAssertions;
 
 namespace UnitTests;
@@ -8,7 +7,7 @@ namespace UnitTests;
 public class UnbeatablePlayTests
 {
     [Fact]
-    public void TheOPlayerCantLooseWhenPlayingBestMoveEveryTime()
+    public void Should_never_let_player_X_win_when_player_O_plays_the_best_move_every_time()
     {
         var unexpectedResult = new WonBy(Player.X);
         var allGameResults = AllPossibleGameResults(TicTacToe.New()).ToList();

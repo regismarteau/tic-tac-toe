@@ -1,6 +1,5 @@
 using Domain;
 using Domain.Gameplay;
-using Domain.ValueObjects;
 using FluentAssertions;
 using UnitTests.Helpers;
 
@@ -45,7 +44,7 @@ public class CompletedGameTests
         _, O, X,
         O, X, _,
         X, _, _])]
-    public void ThePlayerXWinsTheGameWhenALineIsDrawn(params DisplayedMark[] cells)
+    public void Should_make_player_X_win_when_a_line_is_drawn(params DisplayedMark[] cells)
     {
         ResultFrom(cells)
             .Should()
@@ -63,7 +62,7 @@ public class CompletedGameTests
         X, O, O,
         X, X, O
         ])]
-    public void ThePlayerOWinsTheGameWhenALineIsDrawn(params DisplayedMark[] cells)
+    public void Should_make_player_O_win_when_a_line_is_drawn(params DisplayedMark[] cells)
     {
         ResultFrom(cells)
             .Should()
@@ -91,7 +90,7 @@ public class CompletedGameTests
         X, O, O,
         O, X, X
         ])]
-    public void ItIsPossibleThatNoOneWins(params DisplayedMark[] cells)
+    public void Should_end_in_a_draw_when_no_one_wins(params DisplayedMark[] cells)
     {
         ResultFrom(cells)
             .Should()
@@ -99,7 +98,7 @@ public class CompletedGameTests
     }
 
     [Fact]
-    public void ItIsImpossibleToMarkAnotherCellAfterAVictory()
+    public void Should_refuse_the_mark_when_the_game_is_already_won()
     {
         var ticTacToe = PlayAGame([
             X, X, X,
@@ -112,7 +111,7 @@ public class CompletedGameTests
     }
 
     [Fact]
-    public void AGameIsNotYetCompletedIfAnotherPlayIsPossible()
+    public void Should_leave_the_result_undetermined_when_another_play_is_possible()
     {
         TicTacToe.New()
             .Play(new(Player.X, Cell.Left))

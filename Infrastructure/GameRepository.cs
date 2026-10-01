@@ -5,7 +5,6 @@ using Database.Extensions;
 using Domain;
 using Domain.DomainEvents;
 using Domain.Gameplay;
-using Domain.ValueObjects;
 using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;
 using RMediator.Abstractions;
@@ -19,19 +18,15 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
     {
         var game = await dbContext.Games
             .ById(id.Value)
-            .Select(game => new
-            {
-                game.Id,
-                Marks = game.Marks.Select(
-                    mark => new Mark(
-                        mark.Player == PlayerValue.X ? Player.X : Player.O,
-                        mark.Cell.Map())).ToList()
-            })
-            .SingleOrDefaultAsync(cancellationToken);
+            .Select(game => new { game.Id, Marks = game.Marks.Select(mark => new { mark.Player, mark.Cell }).ToList() })
+            .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
 
-        return Game.Rehydrate(new(
-            game?.Id ?? throw new GameNotFoundException()),
-            game.Marks);
+        return Game.Rehydrate(new(game.Id), game.Marks.Select(mark => ToMark(mark.Player, mark.Cell)).ToList());
+    }
+
+    private static Mark ToMark(PlayerValue player, CellValue cell)
+    {
+        return new Mark(player == PlayerValue.X ? Player.X : Player.O, cell.Map());
     }
 
     public async Task Store(Events events, CancellationToken cancellationToken)

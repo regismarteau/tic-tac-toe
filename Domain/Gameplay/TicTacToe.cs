@@ -1,7 +1,6 @@
 using Domain.Gameplay;
-using Domain.ValueObjects;
 
-namespace Domain.ValueObjects;
+namespace Domain.Gameplay;
 
 public record TicTacToe
 {

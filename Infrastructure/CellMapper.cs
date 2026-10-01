@@ -1,5 +1,5 @@
 using Database.Entities;
-using Domain.ValueObjects;
+using Domain.Gameplay;
 
 namespace Infrastructure;
 

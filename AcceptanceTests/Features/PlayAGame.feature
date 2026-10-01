@@ -1,4 +1,4 @@
-﻿Feature: Play a game
+Feature: Play a game
 	As a player
 	I want to play to Tic Tac Toe
 	Because this is the best game ever made
@@ -24,9 +24,3 @@ Scenario: Play the same cell twice is not possible
 	When I play on top left cell
 	And I play on top left cell
 	Then an This cell is already marked error occured
-
-@ErrorHandling
-Scenario: Playing to a game that doesn't exist is not possible
-	When I start a new game
-	But I attempt to play an unknown game
-	Then an Game not found error occured

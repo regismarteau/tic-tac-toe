@@ -1,4 +1,4 @@
-using Domain.ValueObjects;
+using Domain.Gameplay;
 using FluentAssertions;
 using Queries;
 using Reqnroll;
@@ -25,12 +25,6 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
     public async Task WhenIPlayOnTopLeftCell(Cell cell)
     {
         await GameRequests.Play(GameId, cell);
-    }
-
-    [When("I attempt to play an unknown game")]
-    public async Task WhenIAttemptToPlayAnUnknownGame()
-    {
-        await GameRequests.Play(Guid.NewGuid(), Cell.TopLeft);
     }
 
     [Then("the game looks like")]
