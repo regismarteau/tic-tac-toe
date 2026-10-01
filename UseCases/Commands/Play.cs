@@ -1,4 +1,4 @@
-﻿using Domain;
+using Domain;
 using Domain.UnbeatableComputer;
 using Domain.ValueObjects;
 using RMediator.Abstractions;

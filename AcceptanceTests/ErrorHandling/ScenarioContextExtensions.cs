@@ -1,4 +1,4 @@
-﻿using Reqnroll;
+using Reqnroll;
 
 namespace AcceptanceTests.ErrorHandling;
 

@@ -1,4 +1,4 @@
-﻿using Database.Migrations;
+using Database.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

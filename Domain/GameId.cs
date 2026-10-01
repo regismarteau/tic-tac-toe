@@ -1,4 +1,4 @@
-﻿namespace Domain;
+namespace Domain;
 
 public record GameId(Guid Value)
 {

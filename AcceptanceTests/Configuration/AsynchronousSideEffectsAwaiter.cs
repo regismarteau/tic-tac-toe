@@ -1,4 +1,4 @@
-﻿using Database;
+using Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace AcceptanceTests.Configuration;

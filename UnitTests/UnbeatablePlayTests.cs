@@ -1,4 +1,4 @@
-﻿using Domain.Gameplay;
+using Domain.Gameplay;
 using Domain.UnbeatableComputer;
 using Domain.ValueObjects;
 using FluentAssertions;

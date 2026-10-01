@@ -1,6 +1,6 @@
+using System.Text.Json.Serialization;
 using Database.Migrations;
 using Infrastructure;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,5 +1,5 @@
-﻿using RMediator.Abstractions;
 using System.Collections;
+using RMediator.Abstractions;
 
 namespace Domain.DomainEvents;
 

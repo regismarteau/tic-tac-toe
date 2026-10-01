@@ -1,4 +1,4 @@
-﻿using Database;
+using Database;
 using Database.Entities;
 using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;

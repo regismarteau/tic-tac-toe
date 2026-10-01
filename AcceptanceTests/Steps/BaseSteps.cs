@@ -1,4 +1,4 @@
-﻿using AcceptanceTests.Configuration;
+using AcceptanceTests.Configuration;
 using AcceptanceTests.Requests;
 using Reqnroll;
 

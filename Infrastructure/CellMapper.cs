@@ -1,4 +1,4 @@
-﻿using Database.Entities;
+using Database.Entities;
 using Domain.ValueObjects;
 
 namespace Infrastructure;

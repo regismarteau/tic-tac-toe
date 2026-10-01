@@ -1,4 +1,4 @@
-﻿using Domain;
+using Domain;
 using Domain.DomainEvents;
 using RMediator.Abstractions;
 using UseCases.Ports;

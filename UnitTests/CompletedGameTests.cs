@@ -1,4 +1,4 @@
-﻿using Domain;
+using Domain;
 using Domain.Gameplay;
 using Domain.ValueObjects;
 using FluentAssertions;

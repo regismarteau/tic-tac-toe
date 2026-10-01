@@ -1,4 +1,4 @@
-﻿using Database.Entities;
+using Database.Entities;
 
 namespace Database.Extensions;
 

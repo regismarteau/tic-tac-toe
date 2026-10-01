@@ -1,4 +1,4 @@
-﻿using Domain.Gameplay;
+using Domain.Gameplay;
 
 namespace Domain.ValueObjects;
 

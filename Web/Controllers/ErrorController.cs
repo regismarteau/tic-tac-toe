@@ -1,8 +1,8 @@
-﻿using Domain;
+using System.Net;
+using Domain;
 using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Web.Controllers
 {

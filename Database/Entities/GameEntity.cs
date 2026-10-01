@@ -1,4 +1,4 @@
-﻿namespace Database.Entities;
+namespace Database.Entities;
 
 public class GameEntity
 {

@@ -1,9 +1,9 @@
-﻿using AcceptanceTests.ErrorHandling;
-using Microsoft.Extensions.DependencyInjection;
-using Reqnroll;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AcceptanceTests.ErrorHandling;
+using Microsoft.Extensions.DependencyInjection;
+using Reqnroll;
 
 namespace AcceptanceTests.Configuration;
 

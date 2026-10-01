@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.OutboxServices;
+namespace Infrastructure.OutboxServices;
 
 public class DomainEventToPublishAwaiter
 {

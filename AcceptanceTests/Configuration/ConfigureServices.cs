@@ -1,4 +1,4 @@
-﻿using Database;
+using Database;
 using Database.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
