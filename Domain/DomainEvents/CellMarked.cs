@@ -1,5 +1,4 @@
 using Domain.Gameplay;
-using Domain.ValueObjects;
 using RMediator.Abstractions;
 
 namespace Domain.DomainEvents;

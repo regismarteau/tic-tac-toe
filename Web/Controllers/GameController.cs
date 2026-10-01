@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Domain.ValueObjects;
+using Domain.Gameplay;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
 using RMediator.Abstractions;

@@ -1,6 +1,5 @@
 using Domain;
 using Domain.Gameplay;
-using Domain.ValueObjects;
 using FluentAssertions;
 
 namespace UnitTests;
@@ -8,7 +7,7 @@ namespace UnitTests;
 public class PlayTurnTests
 {
     [Fact]
-    public void ThePlayerXCanMarkACellFirst()
+    public void Should_let_player_X_mark_a_cell_when_the_game_starts()
     {
         TicTacToe
             .New()
@@ -19,7 +18,7 @@ public class PlayTurnTests
     }
 
     [Fact]
-    public void ThePlayerOCantMarkFirst()
+    public void Should_refuse_player_O_when_playing_first()
     {
         this.Invoking(_ => TicTacToe
             .New()
@@ -29,7 +28,7 @@ public class PlayTurnTests
     }
 
     [Fact]
-    public void ThePlayerXCantMarkTwice()
+    public void Should_refuse_player_X_when_playing_twice_in_a_row()
     {
         var ticTacToe = TicTacToe
             .New()
@@ -41,7 +40,7 @@ public class PlayTurnTests
     }
 
     [Fact]
-    public void ThePlayerOCanMarkAfterPlayerX()
+    public void Should_let_player_O_mark_a_cell_when_player_X_has_played()
     {
         TicTacToe
             .New()
@@ -55,7 +54,7 @@ public class PlayTurnTests
     }
 
     [Fact]
-    public void APlayerCantMarkACellAlreadyMarked()
+    public void Should_refuse_the_mark_when_the_cell_is_already_marked()
     {
         var ticTacToe = TicTacToe
             .New()

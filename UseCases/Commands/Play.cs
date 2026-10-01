@@ -1,6 +1,6 @@
 using Domain;
+using Domain.Gameplay;
 using Domain.UnbeatableComputer;
-using Domain.ValueObjects;
 using RMediator.Abstractions;
 using UseCases.Ports;
 

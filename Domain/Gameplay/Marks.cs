@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Domain.ValueObjects;
+namespace Domain.Gameplay;
 
 public record Marks : IEnumerable<Mark>
 {

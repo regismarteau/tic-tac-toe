@@ -1,5 +1,5 @@
 using AcceptanceTests.Configuration;
-using Domain.ValueObjects;
+using Domain.Gameplay;
 using Queries;
 
 namespace AcceptanceTests.Requests

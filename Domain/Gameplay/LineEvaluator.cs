@@ -1,6 +1,6 @@
-using Domain.ValueObjects;
+using Domain.Gameplay;
 
-namespace Domain.ValueObjects;
+namespace Domain.Gameplay;
 
 internal static class LineEvaluator
 {

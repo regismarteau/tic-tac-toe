@@ -1,6 +1,4 @@
-using Domain.Gameplay;
-
-namespace Domain.ValueObjects;
+namespace Domain.Gameplay;
 
 public record Mark(Player Player, Cell Cell)
 {
