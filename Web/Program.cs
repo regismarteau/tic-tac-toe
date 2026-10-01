@@ -13,7 +13,7 @@ builder.Services
     .AddTicTacToeServices(builder.Configuration);
 
 var app = builder.Build();
-await app.Services.GetRequiredService<IMigrateDatabase>().Migrate();
+await app.Services.GetRequiredService<IMigrateDatabase>().Migrate(app.Lifetime.ApplicationStopping);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

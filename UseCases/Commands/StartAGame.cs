@@ -12,7 +12,7 @@ public class StartAGameCommandHandler(IStoreGame store) : IHandleCommand<StartAG
     public async Task<Guid> Handle(StartAGame command, CancellationToken cancellationToken)
     {
         var gameStarted = Game.Start();
-        await store.Store(Events.Raise(gameStarted));
+        await store.Store(Events.Raise(gameStarted), cancellationToken);
         return gameStarted.Id.Value;
     }
 }

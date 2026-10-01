@@ -14,7 +14,7 @@ public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame stora
         {
             return;
         }
-        var game = await finder.Get(@event.GameId);
+        var game = await finder.Get(@event.GameId, cancellationToken);
         if (game.TicTacToe.Result is Completed)
         {
             return;
@@ -22,6 +22,6 @@ public class LetTheComputerPlayCommandHandler(IFindGame finder, IStoreGame stora
 
         var cellToMark = new UnbeatablePlayFinder(game.TicTacToe).FindBestCellToMark();
         var events = game.Play(UserVersusComputer.Computer, cellToMark);
-        await storage.Store(events);
+        await storage.Store(events, cancellationToken);
     }
 }
