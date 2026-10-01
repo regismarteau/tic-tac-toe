@@ -1,5 +1,6 @@
 
 using Database;
+using Database.Exceptions;
 using Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 using RMediator.Abstractions;
@@ -10,14 +11,14 @@ public record GetGameState(Guid Id) : IQuery<GameDto>;
 
 public class GetGameStateQueryHandler(TicTacToeDbContext dbContext) : IHandleQuery<GetGameState, GameDto>
 {
-    public async Task<GameDto> Handle(GetGameState command, CancellationToken cancellationToken)
+    public async Task<GameDto> Handle(GetGameState query, CancellationToken cancellationToken)
     {
         return await dbContext.Games
-            .ById(command.Id)
+            .ById(query.Id)
             .Select(game => new GameDto(
                 (ResultDto)game.Result,
                 game.Marks.Select(mark => new MarkDto((SymbolDto)mark.Player, (CellDto)mark.Cell)).ToList()))
-            .SingleAsync(cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
     }
 }
 
