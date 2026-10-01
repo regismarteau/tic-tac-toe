@@ -23,7 +23,7 @@ public static class ConfigureServices
             .AddSingleton(_ =>
             {
                 var substitute = Substitute.For<IMigrateDatabase>();
-                substitute.Migrate().ReturnsForAnyArgs(Task.CompletedTask);
+                substitute.Migrate(default).ReturnsForAnyArgs(Task.CompletedTask);
                 return substitute;
             });
     }

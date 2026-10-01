@@ -12,20 +12,20 @@ namespace Web.Controllers;
 public class GameController(IDispatchCommand commandDispatcher, IDispatchQuery queryDispatcher) : DispatcherController(commandDispatcher, queryDispatcher)
 {
     [HttpPost("start")]
-    public Task<ActionResult<Guid>> Start()
+    public Task<ActionResult<Guid>> Start(CancellationToken cancellationToken)
     {
-        return Dispatch(new StartAGame());
+        return Dispatch(new StartAGame(), cancellationToken);
     }
 
     [HttpGet("{gameId:guid}")]
-    public Task<ActionResult<GameDto>> GetGameState([FromRoute] Guid gameId)
+    public Task<ActionResult<GameDto>> GetGameState([FromRoute] Guid gameId, CancellationToken cancellationToken)
     {
-        return Dispatch(new GetGameState(gameId));
+        return Dispatch(new GetGameState(gameId), cancellationToken);
     }
 
     [HttpPost("{gameId:guid}/play/{cell}")]
-    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute, EnumDataType(typeof(Cell))] Cell cell)
+    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute, EnumDataType(typeof(Cell))] Cell cell, CancellationToken cancellationToken)
     {
-        return await Dispatch(new Play(new(gameId), cell));
+        return await Dispatch(new Play(new(gameId), cell), cancellationToken);
     }
 }
