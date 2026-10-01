@@ -17,17 +17,16 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
     public async Task<Game> Get(GameId id, CancellationToken cancellationToken)
     {
         var game = await dbContext.Games
-            .AsNoTracking()
             .ById(id.Value)
-            .Select(game => new { game.Id, Marks = game.Marks.ToList() })
+            .Select(game => new { game.Id, Marks = game.Marks.Select(mark => new { mark.Player, mark.Cell }).ToList() })
             .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
 
-        return Game.Rehydrate(new(game.Id), game.Marks.Select(ToMark).ToList());
+        return Game.Rehydrate(new(game.Id), game.Marks.Select(mark => ToMark(mark.Player, mark.Cell)).ToList());
     }
 
-    private static Mark ToMark(MarkEntity mark)
+    private static Mark ToMark(PlayerValue player, CellValue cell)
     {
-        return new Mark(mark.Player == PlayerValue.X ? Player.X : Player.O, mark.Cell.Map());
+        return new Mark(player == PlayerValue.X ? Player.X : Player.O, cell.Map());
     }
 
     public async Task Store(Events events, CancellationToken cancellationToken)
