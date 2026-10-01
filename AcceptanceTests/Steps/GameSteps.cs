@@ -1,4 +1,4 @@
-﻿using Domain.ValueObjects;
+using Domain.ValueObjects;
 using FluentAssertions;
 using Queries;
 using Reqnroll;

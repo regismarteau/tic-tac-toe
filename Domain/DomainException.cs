@@ -1,4 +1,4 @@
-﻿namespace Domain;
+namespace Domain;
 
 public class DomainException(string message) : Exception(message);
 public class GameAlreadyCompletedException() : DomainException("The game is already completed");

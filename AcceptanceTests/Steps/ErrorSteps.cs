@@ -1,4 +1,4 @@
-﻿using AcceptanceTests.ErrorHandling;
+using AcceptanceTests.ErrorHandling;
 using FluentAssertions;
 using Reqnroll;
 

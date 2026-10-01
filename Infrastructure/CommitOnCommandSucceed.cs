@@ -1,4 +1,4 @@
-﻿using RMediator.Abstractions;
+using RMediator.Abstractions;
 
 namespace Infrastructure;
 

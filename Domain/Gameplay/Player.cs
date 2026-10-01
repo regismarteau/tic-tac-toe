@@ -1,4 +1,4 @@
-﻿namespace Domain.Gameplay;
+namespace Domain.Gameplay;
 
 public enum Player
 {

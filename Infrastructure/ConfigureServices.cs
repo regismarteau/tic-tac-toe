@@ -1,4 +1,4 @@
-﻿using Database;
+using Database;
 using Infrastructure.OutboxServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

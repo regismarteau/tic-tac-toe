@@ -1,4 +1,4 @@
-﻿
+
 using Database;
 using Database.Extensions;
 using Microsoft.EntityFrameworkCore;
