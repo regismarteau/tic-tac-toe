@@ -11,13 +11,7 @@ public abstract class DispatcherController(IDispatchCommand commandDispatcher, I
         return Ok();
     }
 
-    protected async Task<ActionResult<T>> Dispatch<T>(ICommand<T> command, CancellationToken cancellationToken)
-    {
-        return Ok(await commandDispatcher.Dispatch(command, cancellationToken));
-    }
+    protected async Task<ActionResult<T>> Dispatch<T>(ICommand<T> command, CancellationToken cancellationToken) => Ok(await commandDispatcher.Dispatch(command, cancellationToken));
 
-    protected async Task<ActionResult<T>> Dispatch<T>(IQuery<T> query, CancellationToken cancellationToken)
-    {
-        return Ok(await queryDispatcher.Dispatch(query, cancellationToken));
-    }
+    protected async Task<ActionResult<T>> Dispatch<T>(IQuery<T> query, CancellationToken cancellationToken) => Ok(await queryDispatcher.Dispatch(query, cancellationToken));
 }

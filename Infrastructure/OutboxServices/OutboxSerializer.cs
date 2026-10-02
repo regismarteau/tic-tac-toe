@@ -13,29 +13,21 @@ public static class OutboxSerializer
         SerializationBinder = new DomainEventsBinder()
     };
 
-    public static OutboxEventEntity Serialize(this IDomainEvent @event)
+    public static OutboxEventEntity Serialize(this IDomainEvent @event) => new()
     {
-        return new OutboxEventEntity
-        {
-            EventId = Guid.NewGuid(),
-            Json = JsonConvert.SerializeObject(@event, typeof(IDomainEvent), Settings)
-        };
-    }
+        EventId = Guid.NewGuid(),
+        Json = JsonConvert.SerializeObject(@event, typeof(IDomainEvent), Settings)
+    };
 
-    public static IDomainEvent Deserialize(this OutboxEventEntity entity)
-    {
-        return JsonConvert.DeserializeObject<IDomainEvent>(entity.Json, Settings)
-            ?? throw new InvalidOperationException("Unable to deserialize event");
-    }
+    public static IDomainEvent Deserialize(this OutboxEventEntity entity) => JsonConvert.DeserializeObject<IDomainEvent>(entity.Json, Settings)
+        ?? throw new InvalidOperationException("Unable to deserialize event");
 
     private sealed class DomainEventsBinder : DefaultSerializationBinder
     {
         public override Type BindToType(string? assemblyName, string typeName)
         {
             var type = base.BindToType(assemblyName, typeName);
-            return typeof(IDomainEvent).IsAssignableFrom(type)
-                ? type
-                : throw new JsonSerializationException($"Type {typeName} is not a domain event");
+            return typeof(IDomainEvent).IsAssignableFrom(type) ? type : throw new JsonSerializationException($"Type {typeName} is not a domain event");
         }
     }
 }

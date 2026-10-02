@@ -1,5 +1,4 @@
 using Domain.Gameplay;
-using FluentAssertions;
 
 namespace UnitTests.Helpers;
 
@@ -32,14 +31,12 @@ public static class DisplayedMarkExtensions
             }
 
             turn++;
-        } while (nextPlayerXCell is not null && nextPlayerOCell is not null);
+        }
+        while (nextPlayerXCell is not null && nextPlayerOCell is not null);
 
     }
 
-    private static Cell ToCell(this int index)
-    {
-        return (Cell)index;
-    }
+    private static Cell ToCell(this int index) => (Cell)index;
 
     private record IndexedCellToMark(DisplayedMark Cell, int Index);
 }

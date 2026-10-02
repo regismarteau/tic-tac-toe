@@ -11,38 +11,26 @@ namespace Infrastructure;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddTicTacToeServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        return services
-            .AddDispatcher()
-            .AddRepositories()
-            .AddEventsPublisher()
-            .AddDatabase(configuration);
-    }
+    public static IServiceCollection AddTicTacToeServices(this IServiceCollection services, IConfiguration configuration) => services
+        .AddDispatcher()
+        .AddRepositories()
+        .AddEventsPublisher()
+        .AddDatabase(configuration);
 
-    private static IServiceCollection AddDispatcher(this IServiceCollection services)
-    {
-        return services
-            .AddMediator(config =>
-                config.ScanAssemblies(
+    private static IServiceCollection AddDispatcher(this IServiceCollection services) => services
+        .AddMediator(config =>
+            config.ScanAssemblies(
                     typeof(StartAGame).Assembly,
                     typeof(GetGameState).Assembly)
                 .AddMiddlewares(typeof(CommitOnCommandSucceed<,>), typeof(CommitOnCommandSucceed<>)));
-    }
 
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
-        return services
-            .AddScoped<IFindGame, GameRepository>()
-            .AddScoped<IStoreGame, GameRepository>()
-            .AddScoped<DbContextSaveChanges>();
-    }
+    private static IServiceCollection AddRepositories(this IServiceCollection services) => services
+        .AddScoped<IFindGame, GameRepository>()
+        .AddScoped<IStoreGame, GameRepository>()
+        .AddScoped<DbContextSaveChanges>();
 
-    private static IServiceCollection AddEventsPublisher(this IServiceCollection services)
-    {
-        return services
-            .AddHostedService<BackgroundEventsPublisherService>()
-            .AddSingleton<DomainEventToPublishAwaiter>()
-            .AddScoped<EventsPublisher>();
-    }
+    private static IServiceCollection AddEventsPublisher(this IServiceCollection services) => services
+        .AddHostedService<BackgroundEventsPublisherService>()
+        .AddSingleton<DomainEventToPublishAwaiter>()
+        .AddScoped<EventsPublisher>();
 }

@@ -4,12 +4,6 @@ namespace Domain.UnbeatableComputer;
 
 public class UnbeatablePlayFinder
 {
-    private enum Score
-    {
-        Failure = -10,
-        Draw = 0,
-        Victory = 10
-    }
     private readonly Player CurrentPlayer;
     private readonly Player Opponent;
     private readonly TicTacToe ticTacToe;
@@ -21,18 +15,15 @@ public class UnbeatablePlayFinder
         Opponent = CurrentPlayer == Player.X ? Player.O : Player.X;
     }
 
-    public Cell FindBestCellToMark()
-    {
-        return ticTacToe.AvailableCells
-            .Select(cell => new
-            {
-                Score = EvaluateScoreFor(ticTacToe, new(CurrentPlayer, cell)),
-                Cell = cell
-            })
-            .OrderByDescending(play => play.Score)
-            .First()
-            .Cell;
-    }
+    public Cell FindBestCellToMark() => ticTacToe.AvailableCells
+        .Select(cell => new
+        {
+            Score = EvaluateScoreFor(ticTacToe, new(CurrentPlayer, cell)),
+            Cell = cell
+        })
+        .OrderByDescending(play => play.Score)
+        .First()
+        .Cell;
 
     private Score EvaluateScoreFor(TicTacToe ticTacToe, Mark mark, int depth = 0)
     {
@@ -42,9 +33,7 @@ public class UnbeatablePlayFinder
         {
             WonBy wonBy => wonBy.Player == CurrentPlayer ? Score.Victory - depth : Score.Failure + depth,
             Draw => Score.Draw,
-            _ => mark.Player == Opponent
-                ? GetCurrentPlayerNextMarkMaximumScore(ticTacToe, depth)
-                : GetOpponentNextMarkMinimumScore(ticTacToe, depth)
+            _ => mark.Player == Opponent ? GetCurrentPlayerNextMarkMaximumScore(ticTacToe, depth) : GetOpponentNextMarkMinimumScore(ticTacToe, depth)
         };
     }
 
@@ -86,5 +75,12 @@ public class UnbeatablePlayFinder
         }
 
         return minScore;
+    }
+
+    private enum Score
+    {
+        Failure = -10,
+        Draw = 0,
+        Victory = 10
     }
 }

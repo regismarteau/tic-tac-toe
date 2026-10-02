@@ -19,6 +19,12 @@ public class TestServer : IDisposable
 
     public AcceptanceClient Client { get; }
 
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)
@@ -30,11 +36,5 @@ public class TestServer : IDisposable
             }
             disposedValue = true;
         }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

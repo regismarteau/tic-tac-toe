@@ -9,10 +9,10 @@ namespace AcceptanceTests.Configuration;
 
 public class AcceptanceClient : IDisposable
 {
-    private bool disposedValue;
     private readonly HttpClient client;
     private readonly ScenarioContext context;
     private readonly IServiceScope scopedServices;
+    private bool disposedValue;
 
     public AcceptanceClient(HttpClient client, ScenarioContext context, IServiceProvider services)
     {
@@ -22,6 +22,12 @@ public class AcceptanceClient : IDisposable
     }
 
     private AsynchronousSideEffectsAwaiter Awaiter => scopedServices.ServiceProvider.GetRequiredService<AsynchronousSideEffectsAwaiter>();
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 
     public async Task Post(string path)
     {
@@ -45,10 +51,13 @@ public class AcceptanceClient : IDisposable
     {
         var response = await SendRequest(request);
 
-        return (await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        return await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
-            Converters = { new JsonStringEnumConverter() }
-        })) ?? throw new InvalidOperationException("The response content is null or couldn't be deserialized.");
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            }
+        }) ?? throw new InvalidOperationException("The response content is null or couldn't be deserialized.");
     }
 
     private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)
@@ -86,11 +95,5 @@ public class AcceptanceClient : IDisposable
 
             disposedValue = true;
         }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }
