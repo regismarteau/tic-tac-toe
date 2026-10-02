@@ -18,5 +18,5 @@ public class GameController(IDispatchCommand commandDispatcher, IDispatchQuery q
     public Task<ActionResult<GameDto>> GetGameState([FromRoute] Guid gameId, CancellationToken cancellationToken) => Dispatch(new GetGameState(gameId), cancellationToken);
 
     [HttpPost("{gameId:guid}/play/{cell}")]
-    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute] [EnumDataType(typeof(Cell))] Cell cell, CancellationToken cancellationToken) => await Dispatch(new Play(new(gameId), cell), cancellationToken);
+    public async Task<ActionResult> Play([FromRoute] Guid gameId, [FromRoute][EnumDataType(typeof(Cell))] Cell cell, CancellationToken cancellationToken) => await Dispatch(new Play(new(gameId), cell), cancellationToken);
 }
