@@ -22,20 +22,14 @@ public record Marks : IEnumerable<Mark>
     public IReadOnlyCollection<Cell> OPlayerCells { get; }
     public IReadOnlyCollection<Cell> PlayedCells { get; }
 
+    IEnumerator<Mark> IEnumerable<Mark>.GetEnumerator() => values.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => values.GetEnumerator();
+
     private bool IsInvalid()
     {
         var cellsMarkedMoreThanOnce = PlayedCells.Distinct().Count() != values.Count;
         var badPlayerMovesCount = XPlayerCells.Count != OPlayerCells.Count && XPlayerCells.Count != OPlayerCells.Count + 1;
         return cellsMarkedMoreThanOnce || badPlayerMovesCount;
-    }
-
-    IEnumerator<Mark> IEnumerable<Mark>.GetEnumerator()
-    {
-        return values.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return values.GetEnumerator();
     }
 }

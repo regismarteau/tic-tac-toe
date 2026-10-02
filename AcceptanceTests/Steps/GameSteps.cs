@@ -16,16 +16,10 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
 
     [Given("a game started")]
     [When("I start a new game")]
-    public async Task WhenIStartANewGame()
-    {
-        GameId = await GameRequests.Start();
-    }
+    public async Task WhenIStartANewGame() => GameId = await GameRequests.Start();
 
     [When("^I play on (.+?) cell$")]
-    public async Task WhenIPlayOnTopLeftCell(Cell cell)
-    {
-        await GameRequests.Play(GameId, cell);
-    }
+    public async Task WhenIPlayOnTopLeftCell(Cell cell) => await GameRequests.Play(GameId, cell);
 
     [Then("the game looks like")]
     public async Task ThenTheGameLooksLike(DataTable table)
@@ -50,15 +44,16 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
         game.Result.Should().Be(winner == "me" ? ResultDto.WonByPlayerX : ResultDto.WonByPlayerO);
     }
 
-    private static List<MarkDto> ToMarks(DataTable table)
-    {
-        return table.Header
-            .Concat(table.Rows.SelectMany(row => row.Values))
-            .Select((cellContent, index) => new { CellContent = cellContent, Index = index })
-            .Where(cell => !string.IsNullOrWhiteSpace(cell.CellContent))
-            .Select(cell => new MarkDto(
-                Symbol: cell.CellContent.ToLowerInvariant() == "x" ? SymbolDto.Cross : SymbolDto.Nought,
-                Cell: (CellDto)cell.Index))
-            .ToList();
-    }
+    private static List<MarkDto> ToMarks(DataTable table) => table.Header
+        .Concat(table.Rows.SelectMany(row => row.Values))
+        .Select((cellContent, index) => new
+        {
+            CellContent = cellContent,
+            Index = index
+        })
+        .Where(cell => !string.IsNullOrWhiteSpace(cell.CellContent))
+        .Select(cell => new MarkDto(
+            cell.CellContent.ToLowerInvariant() == "x" ? SymbolDto.Cross : SymbolDto.Nought,
+            (CellDto)cell.Index))
+        .ToList();
 }

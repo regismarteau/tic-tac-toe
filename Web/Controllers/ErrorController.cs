@@ -28,8 +28,5 @@ public class ErrorController(ILogger<ErrorController> logger) : ControllerBase
         return Problem(StatusCodes.Status500InternalServerError);
     }
 
-    private ObjectResult Problem(int statusCode, string? detail = null)
-    {
-        return base.Problem(statusCode: statusCode, detail: detail);
-    }
+    private ObjectResult Problem(int statusCode, string? detail = null) => base.Problem(statusCode: statusCode, detail: detail);
 }

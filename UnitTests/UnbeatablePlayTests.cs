@@ -14,14 +14,11 @@ public class UnbeatablePlayTests
         allGameResults
             .Should()
             .NotContain(unexpectedResult, "There are {0} X Player victories among {1} different games",
-            allGameResults.Count(result => result == unexpectedResult),
-            allGameResults.Count);
+                allGameResults.Count(result => result == unexpectedResult),
+                allGameResults.Count);
     }
 
-    private static IEnumerable<Completed> AllPossibleGameResults(TicTacToe ticTacToe)
-    {
-        return ticTacToe.AvailableCells.SelectMany(cell => PlayATurn(ticTacToe, cell));
-    }
+    private static IEnumerable<Completed> AllPossibleGameResults(TicTacToe ticTacToe) => ticTacToe.AvailableCells.SelectMany(cell => PlayATurn(ticTacToe, cell));
 
     private static IEnumerable<Completed> PlayATurn(TicTacToe ticTacToe, Cell cell)
     {

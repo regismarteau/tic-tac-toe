@@ -8,12 +8,9 @@ namespace AcceptanceTests.Configuration;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection SubstituteServices(this IServiceCollection services)
-    {
-        return services
-            .AddScoped<AsynchronousSideEffectsAwaiter>()
-            .SubstituteDatabase();
-    }
+    public static IServiceCollection SubstituteServices(this IServiceCollection services) => services
+        .AddScoped<AsynchronousSideEffectsAwaiter>()
+        .SubstituteDatabase();
 
     private static IServiceCollection SubstituteDatabase(this IServiceCollection services)
     {

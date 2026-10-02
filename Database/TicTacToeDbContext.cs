@@ -19,7 +19,11 @@ public class TicTacToeDbContext(DbContextOptions<TicTacToeDbContext> options) : 
 
         modelBuilder
             .Entity<MarkEntity>()
-            .HasKey(entity => new { entity.GameId, entity.Cell });
+            .HasKey(entity => new
+            {
+                entity.GameId,
+                entity.Cell
+            });
 
         modelBuilder
             .Entity<MarkEntity>()
@@ -29,6 +33,9 @@ public class TicTacToeDbContext(DbContextOptions<TicTacToeDbContext> options) : 
 
         modelBuilder
             .Entity<OutboxEventEntity>()
-            .HasKey(entity => new { entity.EventId });
+            .HasKey(entity => new
+            {
+                entity.EventId
+            });
     }
 }

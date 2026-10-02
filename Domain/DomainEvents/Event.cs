@@ -12,23 +12,11 @@ public class Events : IEnumerable<IDomainEvent>
         this.events = events;
     }
 
-    public static Events Raise(IDomainEvent @event)
-    {
-        return new([@event]);
-    }
+    public IEnumerator<IDomainEvent> GetEnumerator() => events.GetEnumerator();
 
-    public Events Add(IDomainEvent @event)
-    {
-        return new([.. events, @event]);
-    }
+    IEnumerator IEnumerable.GetEnumerator() => events.GetEnumerator();
 
-    public IEnumerator<IDomainEvent> GetEnumerator()
-    {
-        return events.GetEnumerator();
-    }
+    public static Events Raise(IDomainEvent @event) => new([@event]);
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return events.GetEnumerator();
-    }
+    public Events Add(IDomainEvent @event) => new([.. events, @event]);
 }

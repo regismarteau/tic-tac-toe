@@ -1,4 +1,3 @@
-
 using Database;
 using Database.Exceptions;
 using Database.Extensions;
@@ -11,25 +10,21 @@ public record GetGameState(Guid Id) : IQuery<GameDto>;
 
 public class GetGameStateQueryHandler(TicTacToeDbContext dbContext) : IHandleQuery<GetGameState, GameDto>
 {
-    public async Task<GameDto> Handle(GetGameState query, CancellationToken cancellationToken)
-    {
-        return await dbContext.Games
-            .ById(query.Id)
-            .Select(game => new GameDto(
-                (ResultDto)game.Result,
-                game.Marks.Select(mark => new MarkDto((SymbolDto)mark.Player, (CellDto)mark.Cell)).ToList()))
-            .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
-    }
+    public async Task<GameDto> Handle(GetGameState query, CancellationToken cancellationToken) => await dbContext.Games
+        .ById(query.Id)
+        .Select(game => new GameDto(
+            (ResultDto)game.Result,
+            game.Marks.Select(mark => new MarkDto((SymbolDto)mark.Player, (CellDto)mark.Cell)).ToList()))
+        .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
 }
 
 public record GameDto(ResultDto Result, IReadOnlyCollection<MarkDto> Marks);
-
 public record MarkDto(SymbolDto Symbol, CellDto Cell);
 
 public enum SymbolDto
 {
     Cross = 0,
-    Nought = 1,
+    Nought = 1
 }
 
 public enum CellDto
@@ -50,5 +45,5 @@ public enum ResultDto
     Undetermined = 0,
     WonByPlayerX = 1,
     WonByPlayerO = 2,
-    Draw = 3,
+    Draw = 3
 }

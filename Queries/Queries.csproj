@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="RMediator.Abstractions" />
+    <PackageReference Include="RMediator.Abstractions"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\Database\Database.csproj"/>
   </ItemGroup>
 
 </Project>

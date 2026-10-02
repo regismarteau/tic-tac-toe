@@ -18,15 +18,18 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
     {
         var game = await dbContext.Games
             .ById(id.Value)
-            .Select(game => new { game.Id, Marks = game.Marks.Select(mark => new { mark.Player, mark.Cell }).ToList() })
+            .Select(game => new
+            {
+                game.Id,
+                Marks = game.Marks.Select(mark => new
+                {
+                    mark.Player,
+                    mark.Cell
+                }).ToList()
+            })
             .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
 
         return Game.Rehydrate(new(game.Id), game.Marks.Select(mark => ToMark(mark.Player, mark.Cell)).ToList());
-    }
-
-    private static Mark ToMark(PlayerValue player, CellValue cell)
-    {
-        return new Mark(player == PlayerValue.X ? Player.X : Player.O, cell.Map());
     }
 
     public async Task Store(Events events, CancellationToken cancellationToken)
@@ -38,26 +41,22 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         }
     }
 
-    private Task Handle(IDomainEvent @event, CancellationToken cancellationToken)
-    {
-        return @event switch
-        {
-            GameStarted started => Handle(started, cancellationToken),
-            CellMarked marked => Handle(marked, cancellationToken),
-            GameWon won => Handle(won, cancellationToken),
-            GameResultedAsADraw draw => Handle(draw, cancellationToken),
-            _ => Task.CompletedTask,
-        };
-    }
+    private static Mark ToMark(PlayerValue player, CellValue cell) => new(player == PlayerValue.X ? Player.X : Player.O, cell.Map());
 
-    private async Task Handle(GameStarted started, CancellationToken cancellationToken)
+    private Task Handle(IDomainEvent @event, CancellationToken cancellationToken) => @event switch
     {
-        await dbContext.Games.AddAsync(new GameEntity
-        {
-            Id = started.Id.Value,
-            Result = ResultValue.Undetermined
-        }, cancellationToken);
-    }
+        GameStarted started => Handle(started, cancellationToken),
+        CellMarked marked => Handle(marked, cancellationToken),
+        GameWon won => Handle(won, cancellationToken),
+        GameResultedAsADraw draw => Handle(draw, cancellationToken),
+        _ => Task.CompletedTask
+    };
+
+    private async Task Handle(GameStarted started, CancellationToken cancellationToken) => await dbContext.Games.AddAsync(new()
+    {
+        Id = started.Id.Value,
+        Result = ResultValue.Undetermined
+    }, cancellationToken);
 
     private async Task Handle(GameWon won, CancellationToken cancellationToken)
     {
@@ -71,18 +70,12 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         game.Result = ResultValue.Draw;
     }
 
-    private async Task Handle(CellMarked marked, CancellationToken cancellationToken)
+    private async Task Handle(CellMarked marked, CancellationToken cancellationToken) => await dbContext.AddAsync(new MarkEntity
     {
-        await dbContext.AddAsync(new MarkEntity
-        {
-            GameId = marked.GameId.Value,
-            Player = marked.Player == Player.X ? PlayerValue.X : PlayerValue.O,
-            Cell = marked.Cell.Map()
-        }, cancellationToken);
-    }
+        GameId = marked.GameId.Value,
+        Player = marked.Player == Player.X ? PlayerValue.X : PlayerValue.O,
+        Cell = marked.Cell.Map()
+    }, cancellationToken);
 
-    private async Task<GameEntity> GetEntity(GameId id, CancellationToken cancellationToken)
-    {
-        return await dbContext.Games.ById(id.Value).SingleAsync(cancellationToken);
-    }
+    private async Task<GameEntity> GetEntity(GameId id, CancellationToken cancellationToken) => await dbContext.Games.ById(id.Value).SingleAsync(cancellationToken);
 }

@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
-    <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="RMediator.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions"/>
+    <PackageReference Include="Newtonsoft.Json"/>
+    <PackageReference Include="RMediator.DependencyInjection"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Queries\Queries.csproj" />
-    <ProjectReference Include="..\UseCases\UseCases.csproj" />
+    <ProjectReference Include="..\Queries\Queries.csproj"/>
+    <ProjectReference Include="..\UseCases\UseCases.csproj"/>
   </ItemGroup>
 
 </Project>

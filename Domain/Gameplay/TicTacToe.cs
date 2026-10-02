@@ -1,10 +1,8 @@
-using Domain.Gameplay;
-
 namespace Domain.Gameplay;
 
 public record TicTacToe
 {
-    private readonly static IEnumerable<Cell> AllCells = Enum.GetValues<Cell>();
+    private static readonly IEnumerable<Cell> AllCells = Enum.GetValues<Cell>();
     private readonly bool isFull;
 
     private TicTacToe(IReadOnlyCollection<Mark> marks)
@@ -21,15 +19,9 @@ public record TicTacToe
     public Result Result { get; }
     public Player NextPlayer { get; }
 
-    public static TicTacToe New()
-    {
-        return new([]);
-    }
+    public static TicTacToe New() => new([]);
 
-    internal static TicTacToe From(IReadOnlyCollection<Mark> marks)
-    {
-        return new TicTacToe(marks);
-    }
+    internal static TicTacToe From(IReadOnlyCollection<Mark> marks) => new(marks);
 
     private Result EvaluateResult()
     {
