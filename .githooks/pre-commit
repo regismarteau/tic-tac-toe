@@ -1,0 +1,57 @@
+#!/bin/sh
+# Hook git pre-commit : applique l'.editorconfig aux fichiers indexés.
+#   .cs / .vb : dotnet format ; autres fichiers texte (.razor, .html, .css, .js, .json, .md, .yml, .csproj...) : format-files.ps1.
+# Activation (une fois par clone) : git config core.hooksPath .githooks
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+tmp=$(mktemp -d) && trap 'rm -rf "$tmp"' EXIT
+git -c core.quotepath=off diff --cached --name-only --diff-filter=ACM > "$tmp/staged"
+[ -s "$tmp/staged" ] || exit 0
+grep -E '\.(cs|vb)$' "$tmp/staged" > "$tmp/dotnet"
+grep -Ev '\.(cs|vb)$' "$tmp/staged" > "$tmp/other"
+
+# Un fichier partiellement indexé ne peut pas être ré-indexé sans y ajouter les changements non indexés.
+: > "$tmp/partial"
+while IFS= read -r file; do
+    git diff --quiet -- "$file" || printf '%s\n' "$file" >> "$tmp/partial"
+done < "$tmp/staged"
+fingerprints() {
+    while IFS= read -r file; do git diff -- "$file" | cksum; done < "$tmp/partial"
+}
+before=$(fingerprints)
+
+# run_on <liste> <commande...> : lance la commande suivie des fichiers de la liste (un par ligne).
+run_on() {
+    list=$1; shift
+    while IFS= read -r file; do set -- "$@" "$file"; done < "$list"
+    "$@"
+}
+
+if [ -s "$tmp/dotnet" ]; then
+    solution=$(ls ./*.sln 2>/dev/null | head -n 1)
+    if [ -z "$solution" ] || ! command -v dotnet >/dev/null 2>&1; then
+        echo "pre-commit : solution ou dotnet introuvable, dotnet format ignoré." >&2
+    else
+        run_on "$tmp/dotnet" dotnet format "$solution" --severity info --include || exit 1
+    fi
+fi
+
+if [ -s "$tmp/other" ]; then
+    powershell=$(command -v pwsh || command -v powershell)
+    if [ -z "$powershell" ] || [ ! -f .githooks/format-files.ps1 ]; then
+        echo "pre-commit : PowerShell ou .githooks/format-files.ps1 introuvable, formatage des autres fichiers ignoré." >&2
+    else
+        run_on "$tmp/other" "$powershell" -NoProfile -ExecutionPolicy Bypass -File .githooks/format-files.ps1 || exit 1
+    fi
+fi
+
+if [ "$before" != "$(fingerprints)" ]; then
+    echo "pre-commit : le formatage a modifié des fichiers partiellement indexés ; vérifier puis les ré-indexer (git add -p)." >&2
+    exit 1
+fi
+
+while IFS= read -r file; do
+    grep -Fxq -- "$file" "$tmp/partial" || git add -- "$file"
+done < "$tmp/staged"
+exit 0
