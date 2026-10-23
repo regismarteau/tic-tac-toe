@@ -1,0 +1,1 @@
+C:/Development/claude-config/rules/dotnet/cancellation-token.md

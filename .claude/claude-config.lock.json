@@ -1,0 +1,37 @@
+{
+    "source":  "56b527cf3b818c9e17d56b275e4a15e30ea740a6",
+    "profiles":  [
+                     "common",
+                     "dotnet",
+                     "dotnet-api",
+                     "dotnet-data"
+                 ],
+    "only":  null,
+    "files":  {
+                  ".claude/hooks/session-check.ps1":  "A3A5E4B473EDB82D29EA18C56276A8C03E52702DD4B846409652EBB34C35BF06",
+                  ".claude/rules/acceptance-tests.md":  "A2F0E4F7AB81B2EED16E394D0E470C02C282505CC7EB18ED460215303D17DE95",
+                  ".claude/rules/api-input-validation.md":  "E03843D02BFA42E6B8A1C32C61CBA3915B9966DBBCDBD3884D03F5F9EE80255F",
+                  ".claude/rules/before-commit.md":  "4C0076B30061B7A5D3E7B74C033F61A7E924F2E54BB19CC17A1E18CD1CF9C1C5",
+                  ".claude/rules/bug-regression-test.md":  "0755EEA7D6830C57A8D148D7078221649521D462AC26FD2F83C5473063C31A7F",
+                  ".claude/rules/cancellation-token.md":  "9460097FCEF9356C1F4E26DD632A09D0ADEE3D9C0BAD3D75429CACFB468B900F",
+                  ".claude/rules/clean-code.md":  "71653A6B9B8B05869DB280CB409774D118B1ADAEBB202A5039486598FB6A6702",
+                  ".claude/rules/ef-core-persistence.md":  "1CDA0C5B52174D8957F4F13B617C8F1A41FA4BEF2D834A8319C62A93E78F63FE",
+                  ".claude/rules/errors-and-logs.md":  "E2751CD9B620AEB6D4647E60A7E68FAC1910245DFF3D4F4A3BB42036B175910F",
+                  ".claude/rules/format-before-commit.md":  "CC5B34B2C7056CB44F0CF30BAF2273D76479B78A6CC5DCF5B002EA646C91D7B9",
+                  ".claude/rules/github-actions-ci.md":  "2622EA6CC066403A9543500D2063EA62A19D6EB854D9EB81B2F0EB4386E33242",
+                  ".claude/rules/git-workflow.md":  "5AC85CCF59C2F410F47E3491CC4571841B11B16DF08B8E486C866CEC9B58BDC2",
+                  ".claude/rules/run-tests.md":  "3C14199646905ECAC8D67A87165E33AFC5279DFA824644BDFE1BC04ADD5009C7",
+                  ".claude/rules/run-tests-dotnet.md":  "0EBF8F04851744F53547BD176ACFF59408196908119D9FDFA9C7369B930838E9",
+                  ".claude/rules/security.md":  "F460C8BE1C1825C9650A7FCDBA4504764E238544F33937C68CDEABB6893E7C13",
+                  ".claude/rules/strict-build.md":  "BEBA32AD6712F888BCB08135B74F1323776DF82F85643F9F9AD61653A9EEF5B6",
+                  ".claude/rules/unit-tests.md":  "4EC47C157CDA9A69A821822FF1DD65C8AE76A0E5997B47F57BB7419EC6492240",
+                  ".claude/skills/audit-solution/SKILL.md":  "708D713D602457BEB83AF5CDC2A82A2DEF146C99040DC70AC2149A321BD202D5",
+                  ".claude/skills/cpm/SKILL.md":  "E20FA30E636C5973B618C6FCDC346CEA5D1696A119834BF001C9AA571A5B09F7",
+                  ".claude/skills/new-migration/SKILL.md":  "9791532E9282A44E38FC2929A540B29FA240B5593C96960E07D24B8ABE672F4D",
+                  ".claude/skills/new-use-case/SKILL.md":  "C4C0F428DFA4128E982AF6EA12839447FD8550DE8A06A739DB3D9A9D9FEEDCCF",
+                  ".claude/skills/review-modified-files/review-gate.ps1":  "7E0ECE56005F5509A4CCDDA1E5388A742A0452C89699D051E29338AF5D1D92E7",
+                  ".claude/skills/review-modified-files/SKILL.md":  "D715DB4CC606B5E20B7196CA9CDBCB844F84296A8CA909364AD87CD2948360D8",
+                  ".githooks/format-files.ps1":  "4CFED266C47689EA05556358A371D0D730FA1DB6603628393488DC18AAB95550",
+                  ".githooks/pre-commit":  "2E77D2ADB1D2BC3CE75FF3FBF759889E427CEC5BB435883CC0805FC2A31B5EB8"
+              }
+}

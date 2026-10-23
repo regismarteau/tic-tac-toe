@@ -1,0 +1,1 @@
+C:/Development/claude-config/rules/dotnet/format-before-commit.md

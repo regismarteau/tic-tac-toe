@@ -1,12 +1,14 @@
 #!/bin/sh
 # Hook git pre-commit : applique l'.editorconfig aux fichiers indexés.
 #   .cs / .vb : dotnet format ; autres fichiers texte (.razor, .html, .css, .js, .json, .md, .yml, .csproj...) : format-files.ps1.
-# Activation (une fois par clone) : git config core.hooksPath .githooks
+# Copié dans .githooks/ du projet par sync.ps1 (avec format-files.ps1), qui règle core.hooksPath (config partagée avec les worktrees).
+# Dans un clone neuf : git config core.hooksPath .githooks
 
 cd "$(git rev-parse --show-toplevel)" || exit 1
 
 tmp=$(mktemp -d) && trap 'rm -rf "$tmp"' EXIT
-git -c core.quotepath=off diff --cached --name-only --diff-filter=ACM > "$tmp/staged"
+# .claude/ et .githooks/ sont copiés de claude-config par sync.ps1 : les reformater les ferait diverger de leur source.
+git -c core.quotepath=off diff --cached --name-only --diff-filter=ACM | grep -Ev '^(\.claude|\.githooks)/' > "$tmp/staged"
 [ -s "$tmp/staged" ] || exit 0
 grep -E '\.(cs|vb)$' "$tmp/staged" > "$tmp/dotnet"
 grep -Ev '\.(cs|vb)$' "$tmp/staged" > "$tmp/other"
@@ -29,7 +31,7 @@ run_on() {
 }
 
 if [ -s "$tmp/dotnet" ]; then
-    solution=$(ls ./*.sln 2>/dev/null | head -n 1)
+    solution=$(ls ./*.sln ./*.slnx 2>/dev/null | head -n 1)
     if [ -z "$solution" ] || ! command -v dotnet >/dev/null 2>&1; then
         echo "pre-commit : solution ou dotnet introuvable, dotnet format ignoré." >&2
     else

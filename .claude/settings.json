@@ -6,10 +6,21 @@
                                          "hooks":  [
                                                        {
                                                            "type":  "command",
-                                                           "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/review-gate.ps1\""
+                                                           "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/skills/review-modified-files/review-gate.ps1\"",
+                                                           "if":  "Bash(git *commit*)"
                                                        }
                                                    ]
                                      }
-                                 ]
+                                 ],
+                  "SessionStart":  [
+                                       {
+                                           "hooks":  [
+                                                         {
+                                                             "type":  "command",
+                                                             "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-check.ps1\""
+                                                         }
+                                                     ]
+                                       }
+                                   ]
               }
 }
