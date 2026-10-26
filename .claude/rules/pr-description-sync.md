@@ -1,1 +1,0 @@
-C:/Development/claude-config/rules/common/pr-description-sync.md

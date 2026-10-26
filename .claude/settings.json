@@ -21,6 +21,18 @@
                                                          }
                                                      ]
                                        }
-                                   ]
+                                   ],
+                  "PostToolUse":  [
+                                      {
+                                          "matcher":  "Bash",
+                                          "hooks":  [
+                                                        {
+                                                            "type":  "command",
+                                                            "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/skills/review-modified-files/review-gate.ps1\"",
+                                                            "if":  "Bash(dotnet test*)"
+                                                        }
+                                                    ]
+                                      }
+                                  ]
               }
 }
