@@ -1,5 +1,5 @@
 {
-    "source":  "74d9cc143063f7cda76ced7d31ad4fd0a2b158a4",
+    "source":  "cb39824820cfe8ef40d421807bff86f9cf466a0e",
     "profiles":  [
                      "common",
                      "dotnet",
@@ -9,7 +9,7 @@
     "only":  null,
     "files":  {
                   ".claude/hooks/session-check.ps1":  "A3A5E4B473EDB82D29EA18C56276A8C03E52702DD4B846409652EBB34C35BF06",
-                  ".claude/rules/acceptance-tests.md":  "A2F0E4F7AB81B2EED16E394D0E470C02C282505CC7EB18ED460215303D17DE95",
+                  ".claude/rules/acceptance-tests.md":  "9102D173479FE07F2DDB27505BD1748A98C9C3A0D5624625CC73F585A658486C",
                   ".claude/rules/api-input-validation.md":  "E03843D02BFA42E6B8A1C32C61CBA3915B9966DBBCDBD3884D03F5F9EE80255F",
                   ".claude/rules/before-commit.md":  "B1E7AF5F3DC1EF512767595ADD892A270DD671487E512D211C4DB2A42B1384E9",
                   ".claude/rules/bug-regression-test.md":  "0755EEA7D6830C57A8D148D7078221649521D462AC26FD2F83C5473063C31A7F",
